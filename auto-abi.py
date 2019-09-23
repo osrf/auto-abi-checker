@@ -23,6 +23,7 @@ Options:
 
 from docopt import docopt
 from generator import SrcGenerator
+from abi_executor import ABIExecutor
 from utils import error
 
 
@@ -63,9 +64,11 @@ def process_input(args):
     generator = SrcGenerator()
     src_gen = generator.generate(orig_type)
     src_gen.run(orig_value)
-
     new_gen = generator.generate(new_type)
     new_gen.run(new_value)
+
+    abi_exe = ABIExecutor()
+    abi_exe.run(src_gen, new_gen)
 
 
 def main():
