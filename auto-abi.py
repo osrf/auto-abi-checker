@@ -22,7 +22,7 @@ Options:
 """
 
 from docopt import docopt
-from abichecker import SrcGenerator
+from generator import SrcGenerator
 from utils import error
 
 
