@@ -17,9 +17,7 @@ from glob import glob
 
 
 def _check_call(cmd):
-    print('')
     print(" - Run '%s'" % ' '.join(cmd))
-    print('')
 
     try:
         check_call(cmd)
