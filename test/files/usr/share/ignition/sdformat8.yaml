@@ -1,0 +1,8 @@
+--- # Subcommands available inside ignition-transport.
+format: 1.0.0
+library_name: sdformat8
+library_version: 8.3.0
+library_path: /usr/lib/ruby/ignition/cmdsdformat8
+commands:
+    - sdf   : Utilities for SDF files.
+---

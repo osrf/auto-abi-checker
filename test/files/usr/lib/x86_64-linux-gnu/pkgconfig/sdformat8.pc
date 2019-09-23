@@ -1,0 +1,10 @@
+prefix="/usr"
+libdir=${prefix}/lib/x86_64-linux-gnu
+includedir=${prefix}/include
+
+Name: SDF
+Description: Robot Modeling Language (SDF)
+Version: 8.3.0
+Requires: ignition-math6
+Libs: -L${libdir} -lsdformat8
+CFlags: -I${includedir}/sdformat-8.3 -std=c++17

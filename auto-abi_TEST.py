@@ -1,5 +1,6 @@
 import unittest
 from srcs_apt import SrcAptBase
+from srcs_local import SrcLocalDir
 from utils import _check_call
 from glob import glob
 
@@ -19,10 +20,12 @@ class SrcTestPkg(SrcAptBase):
 
 class TestBase(unittest.TestCase):
     def setUp(self):
-        self.test_class = SrcTestPkg()
+        self.orig_class = SrcTestPkg()
+        self.new_class = SrcLocalDir()
 
     def test_run_apt(self):
-        self.test_class.run('stub')
+        self.orig_class.run('stub')
+        self.new_class.run('test/files')
 
 
 if __name__ == '__main__':
