@@ -4,6 +4,7 @@
 # Licensed under the Apache License, Version 2.0
 
 from srcs_apt import SrcROSPkgGenerator, SrcOSRFPkgGenerator
+from srcs_local import SrcLocalDir
 from utils import error
 
 
@@ -13,5 +14,7 @@ class SrcGenerator:
             return SrcROSPkgGenerator()
         elif (src_type == 'osrf-pkg'):
             return SrcOSRFPkgGenerator()
+        elif (src_type == 'local-dir'):
+            return SrcLocalDir()
         else:
-            error("Internal error SrcGenerator. Unknow src-type ")
+            error("Internal error SrcGenerator. Unknown src-type ")

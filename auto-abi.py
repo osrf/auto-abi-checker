@@ -40,7 +40,9 @@ def normalize_args(args):
 
 
 def check_type(value_type):
-    if (value_type == 'ros-pkg' or value_type == 'osrf-pkg'):
+    if (value_type == 'ros-pkg' or
+        value_type == 'osrf-pkg' or
+        value_type == 'local-dir'):
         True
     else:
         error("Unknow type " + value_type)

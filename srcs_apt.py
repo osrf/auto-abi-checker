@@ -46,7 +46,7 @@ class SrcAptBase(SrcBase):
     def extract_deb_files(self):
         files = self.list_files('*.deb')
         for f in files:
-            _check_call(['dpkg', '-x', f, self.ws])
+            _check_call(['dpkg', '-x', f, self.ws_files])
 
 
 class SrcOSRFPkgGenerator(SrcAptBase):

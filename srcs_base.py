@@ -5,11 +5,13 @@
 
 from tempfile import mkdtemp
 from glob import glob
+from os.path import join
 
 
 class SrcBase:
     def __init__(self):
         self.ws = mkdtemp()
+        self.ws_files = join(self.ws, 'files')
         print("* Workspace: " + self.ws)
 
     def list_files(self, pattern):
