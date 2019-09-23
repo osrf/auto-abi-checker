@@ -14,6 +14,7 @@ orig-type:
         osrf-pkg                Code to check is a OSRF package
                                 Use repository name for value (i.e. sdformat7)
         local-dir               Code to check is a local directory
+                                Use full path to installation dir
 
 Options:
         -h --help               Show this screen
@@ -21,7 +22,8 @@ Options:
 """
 
 from docopt import docopt
-from abichecker import SrcGenerator, error
+from abichecker import SrcGenerator
+from utils import error
 
 
 def normalize_args(args):

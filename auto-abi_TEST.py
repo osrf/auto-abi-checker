@@ -1,5 +1,6 @@
 import unittest
-from abichecker import SrcAptBase, _check_call
+from srcs_apt import SrcAptBase
+from utils import _check_call
 from glob import glob
 
 
