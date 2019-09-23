@@ -4,15 +4,16 @@
 # Licensed under the Apache License, Version 2.0
 """
 Usage:
-        auto-abi --orig-type <orig-type> --orig <orig>
+        auto-abi --orig-type <orig-type> --orig <orig> --new-type <new-type> --new <new>
         auto-abi (-h | --help)
         auto-abi --version
 
 orig-type:
-        ros-pkg                 Origin to check is a ROS package
-                                Use repository name for --orig value
-        osrf-pkg                Origin to check is a OSRF package
-                                Use repository name for --orig value
+        ros-pkg                 Code to check is a ROS package
+                                Use repository name for value (i.e gazebo_ros_pkgs)
+        osrf-pkg                Code to check is a OSRF package
+                                Use repository name for value (i.e. sdformat7)
+        local-dir               Code to check is a local directory
 
 Options:
         -h --help               Show this screen
@@ -27,27 +28,40 @@ def normalize_args(args):
     orig_type = args["<orig-type>"]
     orig_value = args["<orig>"]
 
+    new_type = args["<new-type>"]
+    new_value = args["<new>"]
+
     # repo_name = args["<repo-name>"] if args["<repo-name>"] else "osrf"
     # repo_type = args["<repo-type>"] if args["<repo-type>"] else "stable"
 
-    return orig_type, orig_value
+    return orig_type, orig_value, new_type, new_value
+
+
+def check_type(value_type):
+    if (value_type == 'ros-pkg' or value_type == 'osrf-pkg'):
+        True
+    else:
+        error("Unknow type " + value_type)
 
 
 def validate_input(args):
-    orig_type, orig_value = args
+    orig_type, orig_value, new_type, new_valie = args
 
-    if (orig_type == 'ros-pkg' or orig_type == 'osrf-pkg'):
-        True
-    else:
-        error("Unknow orig-type " + orig_type)
+    if (check_type(orig_type) and check_type(new_type)):
+        return True
+
+    return False
 
 
 def process_input(args):
-    orig_type, orig_value = args
+    orig_type, orig_value, new_type, new_value = args
 
     generator = SrcGenerator()
     src_gen = generator.generate(orig_type)
     src_gen.run(orig_value)
+
+    new_gen = generator.generate(new_type)
+    new_gen.run(new_value)
 
 
 def main():
