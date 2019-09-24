@@ -9,11 +9,10 @@ from srcs_base import SrcBase
 
 from os.path import dirname, realpath
 import pathlib
+import rosdistro
 
 
 class SrcAptBase(SrcBase):
-    import rosdistro
-
     def __init__(self, name):
         SrcBase.__init__(self, name)
 
