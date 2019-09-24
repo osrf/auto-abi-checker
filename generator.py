@@ -9,12 +9,12 @@ from utils import error
 
 
 class SrcGenerator:
-    def generate(self, src_type):
+    def generate(self, src_type, name):
         if (src_type == 'ros-pkg'):
-            return SrcROSPkgGenerator()
+            return SrcROSPkgGenerator(name)
         elif (src_type == 'osrf-pkg'):
-            return SrcOSRFPkgGenerator()
+            return SrcOSRFPkgGenerator(name)
         elif (src_type == 'local-dir'):
-            return SrcLocalDir()
+            return SrcLocalDir(name)
         else:
             error("Internal error SrcGenerator. Unknown src-type ")

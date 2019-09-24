@@ -9,7 +9,8 @@ from os.path import join
 
 
 class SrcBase:
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.ws = mkdtemp()
         self.ws_files = join(self.ws, 'files')
         print("* Workspace: " + self.ws)

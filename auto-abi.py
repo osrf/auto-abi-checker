@@ -62,9 +62,9 @@ def process_input(args):
     orig_type, orig_value, new_type, new_value = args
 
     generator = SrcGenerator()
-    src_gen = generator.generate(orig_type)
+    src_gen = generator.generate(orig_type, 'orig')
     src_gen.run(orig_value)
-    new_gen = generator.generate(new_type)
+    new_gen = generator.generate(new_type, 'new')
     new_gen.run(new_value)
 
     abi_exe = ABIExecutor()

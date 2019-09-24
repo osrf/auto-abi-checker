@@ -13,8 +13,8 @@ import rosdistro
 
 
 class SrcAptBase(SrcBase):
-    def __init__(self):
-        SrcBase.__init__(self)
+    def __init__(self, name):
+        SrcBase.__init__(self, name)
 
     def run(self, value):
         self.validate(value)
@@ -50,8 +50,8 @@ class SrcAptBase(SrcBase):
 
 
 class SrcOSRFPkgGenerator(SrcAptBase):
-    def __init__(self):
-        SrcAptBase.__init__(self)
+    def __init__(self, name):
+        SrcAptBase.__init__(self, name)
         self.osrf_url_base = 'http://bitbucket.org/osrf/'
 
     def get_deb_package_names(self, osrf_repo):
@@ -59,8 +59,8 @@ class SrcOSRFPkgGenerator(SrcAptBase):
 
 
 class SrcROSPkgGenerator(SrcAptBase):
-    def __init__(self, ros_distro='melodic'):
-        SrcAptBase.__init__(self)
+    def __init__(self, name, ros_distro='melodic'):
+        SrcAptBase.__init__(self, name)
         self.ros_distro = ros_distro
         self.rosdistro_index = rosdistro.get_index(rosdistro.get_index_url())
         self.cache = rosdistro.get_distribution_cache(self.rosdistro_index,

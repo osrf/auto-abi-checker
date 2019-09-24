@@ -11,8 +11,8 @@ from shutil import copytree
 
 
 class SrcLocalDir(SrcBase):
-    def __init__(self):
-        SrcBase.__init__(self)
+    def __init__(self, name):
+        SrcBase.__init__(self, name)
 
     def run(self, directory):
         self.validate(directory)

@@ -5,6 +5,7 @@
 
 from tempfile import mkdtemp
 from os import chdir
+from os.path import join
 from utils import _check_call
 
 
@@ -12,10 +13,28 @@ class ABIExecutor():
     def __init__(self):
         self.bin = 'abi-compliance-checker'
         self.ws = mkdtemp()
+        self.ws_abi_dump = join(self.ws, 'abi_dumps')
+        self.ws_report = join(self.ws, 'compat_reports')
+        self.report_name = "test_name_report"
 
     def run(self, orig_src, new_src):
+        # Use orig value as report name
+        self.report_name = orig_src.name
         chdir(self.ws)
         self.orig_abi_dump = self.dump(orig_src)
+        self.orig_abi_dump = self.dump(new_src)
+        self.generate_report(orig_src, new_src)
+        print("* Generated: " + self.get_compat_report_file())
+
+    def get_dump_file(self, src_class):
+        return join(self.ws_abi_dump, src_class.name, 'X', 'ABI.dump')
+
+    def get_compat_report_file(self):
+        return join(self.ws_report, self.report_name, 'X_to_X', 'compat_report.html')
 
     def dump(self, src_class):
-        _check_call([self.bin, '-l', 'test_name', '-dump', src_class.ws_files])
+        # TODO: fine-grained mechanism for flags is needed
+        _check_call([self.bin, '-l', src_class.name, '-dump', src_class.ws_files, '-gcc-options', '--std=c++17'])
+
+    def generate_report(self, orig_src, new_src):
+        _check_call([self.bin, '-l', self.report_name, '-old', self.get_dump_file(orig_src), '-new', self.get_dump_file(new_src)])
