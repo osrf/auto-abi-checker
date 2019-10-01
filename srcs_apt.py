@@ -7,7 +7,7 @@ from utils import _check_call, error
 from os import chdir
 from srcs_base import SrcBase
 
-from os.path import dirname, realpath
+from os.path import dirname, realpath, join
 import pathlib
 import rosdistro
 
@@ -53,6 +53,7 @@ class SrcOSRFPkgGenerator(SrcAptBase):
     def __init__(self, name):
         SrcAptBase.__init__(self, name)
         self.osrf_url_base = 'http://bitbucket.org/osrf/'
+        self.compilation_flags.append('--std=c++17')
 
     def get_deb_package_names(self, osrf_repo):
         return ["lib" + osrf_repo, "lib" + osrf_repo + "-dev"]
@@ -66,6 +67,16 @@ class SrcROSPkgGenerator(SrcAptBase):
         self.cache = rosdistro.get_distribution_cache(self.rosdistro_index,
                                                       ros_distro)
         self.distro_file = self.cache.distribution_file
+        # More logic could be needed with new ros distributions
+        # ROS1 - https://www.ros.org/reps/rep-0003.html
+        # ROS2 - http://design.ros2.org/articles/changes.html
+        if ros_distro == 'melodic':
+            self.compilation_flags.append('--std=c++14')
+        else:
+            self.compilation_flags.append('--std=c++17')
+        # Needs to add /opt/ros includes to compile ROS software
+        self.compilation_flags.append('-I' +
+                                       join('/opt/ros/', ros_distro, 'include'))
 
     def validate(self, ros_repo):
         # Check that repo exists in ROS

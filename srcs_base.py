@@ -13,6 +13,7 @@ class SrcBase:
         self.name = name
         self.ws = mkdtemp()
         self.ws_files = join(self.ws, 'files')
+        self.compilation_flags = []
         print("* Workspace: " + self.ws)
 
     def __str__(self):
@@ -20,3 +21,6 @@ class SrcBase:
 
     def list_files(self, pattern):
         return glob(self.ws + '/' + pattern)
+
+    def get_cmd_compilation_flags(self):
+        return " ".join(self.compilation_flags)
