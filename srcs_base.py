@@ -15,5 +15,8 @@ class SrcBase:
         self.ws_files = join(self.ws, 'files')
         print("* Workspace: " + self.ws)
 
+    def __str__(self):
+        return str(self.ws)
+
     def list_files(self, pattern):
         return glob(self.ws + '/' + pattern)
