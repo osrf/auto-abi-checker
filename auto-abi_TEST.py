@@ -50,7 +50,7 @@ class TestBase(unittest.TestCase):
         self.orig_class.run('stub')
         self.new_class.run('test/files')
         abi_exe = ABIExecutor('--std=c++17')
-        # abi_exe.run(self.orig_class, self.new_class)
+        abi_exe.run(self.orig_class, self.new_class)
 
 
 if __name__ == '__main__':
