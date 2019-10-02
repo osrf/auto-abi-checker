@@ -1,9 +1,31 @@
 import unittest
-from srcs_apt import SrcAptBase
+from srcs_apt import SrcAptBase, SrcOSRFPkgGenerator, SrcROSPkgGenerator
 from srcs_local import SrcLocalDir
 from abi_executor import ABIExecutor
 from utils import _check_call
 from glob import glob
+
+class TestFlags(unittest.TestCase):
+    def setUp(self):
+        self.osrf = SrcOSRFPkgGenerator('test_osrf')
+        self.ros1 = SrcROSPkgGenerator('test_ros', 'melodic')
+        self.ros2 = SrcROSPkgGenerator('test_ros', 'dashing')
+        self.abi_exe = ABIExecutor()
+
+    def test_check_osrf_flags(self):
+        self.assertEqual(
+                '--std=c++17',
+                self.abi_exe.get_compilation_flags(self.osrf, self.osrf))
+
+    def test_check_ros1_flags(self):
+        self.assertEqual(
+                '--std=c++14 -I/opt/ros/melodic/include',
+                self.abi_exe.get_compilation_flags(self.ros1, self.ros1))
+
+    def test_check_combo_flags(self):
+        self.assertEqual(
+                '--std=c++17 -I/opt/ros/dashing/include',
+                self.abi_exe.get_compilation_flags(self.osrf, self.ros2))
 
 
 class SrcTestPkg(SrcAptBase):
@@ -27,9 +49,8 @@ class TestBase(unittest.TestCase):
     def test_run_apt(self):
         self.orig_class.run('stub')
         self.new_class.run('test/files')
-        abi_exe = ABIExecutor()
+        abi_exe = ABIExecutor('--std=c++17')
         abi_exe.run(self.orig_class, self.new_class)
-
 
 
 if __name__ == '__main__':

@@ -14,7 +14,9 @@ def _check_call(cmd):
         check_call(cmd)
     except Exception as e:
         print(str(e))
+        return e
 
+    return 0
 
 def error(msg):
     print("\n [err] " + msg + "\n", file=stderr)
