@@ -4,11 +4,10 @@
 # Licensed under the Apache License, Version 2.0
 
 from utils import _check_call, error
-from os import chdir
+from os import chdir, environ
 from srcs_base import SrcBase
 
 from os.path import dirname, realpath, join
-from os import environ
 import pathlib
 import rosdistro
 
@@ -56,31 +55,31 @@ class SrcOSRFPkgGenerator(SrcAptBase):
 
 
 class SrcROSPkgGenerator(SrcAptBase):
-    def __init__(self, name, ros_distro):
+    def __init__(self, name, ros_distro=''):
         SrcAptBase.__init__(self, name)
         self.ros_distro = self.detect_ros_distribution(ros_distro)
         self.rosdistro_index = rosdistro.get_index(rosdistro.get_index_url())
         self.cache = rosdistro.get_distribution_cache(self.rosdistro_index,
-                                                      ros_distro)
+                                                      self.ros_distro)
         self.distro_file = self.cache.distribution_file
         # More logic could be needed with new ros distributions
         # ROS1 - https://www.ros.org/reps/rep-0003.html
         # ROS2 - http://design.ros2.org/articles/changes.html
-        if ros_distro == 'melodic':
+        if self.ros_distro == 'melodic':
             self.compilation_flags.append('--std=c++14')
         else:
             self.compilation_flags.append('--std=c++17')
+            # needed for gazebo_ros_pkgs
+            self.compilation_flags.append('-DBOOST_HAS_PTHREADS=1')
         # Needs to add /opt/ros includes to compile ROS software
         self.compilation_flags.append('-I' +
-                                    join('/opt/ros/', ros_distro, 'include'))
+                                    join('/opt/ros/', self.ros_distro, 'include'))
 
     def detect_ros_distribution(self, user_ros_distro):
         if user_ros_distro:
             return user_ros_distro
-
         if environ['ROS_DISTRO']:
             return environ['ROS_DISTRO']
-
         error("Not ROS distribution provided or ROS_DISTRO environment var")
 
     def validate(self, ros_repo):
