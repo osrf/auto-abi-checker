@@ -58,7 +58,7 @@ class SrcOSRFPkgGenerator(SrcAptBase):
         return ["lib" + osrf_repo, "lib" + osrf_repo + "-dev"]
 
 
-class SrcROSPkgGenerator(SrcAptBase):
+class SrcROSRepoGenerator(SrcAptBase):
     def __init__(self, name, ros_distro='melodic'):
         SrcAptBase.__init__(self, name)
         self.ros_distro = ros_distro
