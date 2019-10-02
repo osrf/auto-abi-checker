@@ -9,6 +9,6 @@ before_install:
   - sudo bash -c 'echo "deb [trusted=yes] http://packages.ros.org/ros/ubuntu xenial main" > /etc/apt/sources.list.d/ros-latest.list'
   - sudo apt-get update -qq
 install:
-  - sudo apt-get install -qq python3-rosdistro python3-rosdep python3 python-rosdistro
+  - sudo apt-get install -qq python3-rosdistro python3-rosdep python3
 script:
   - python3 *_TEST.py
