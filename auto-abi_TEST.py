@@ -1,5 +1,5 @@
 import unittest
-from srcs_apt import SrcAptBase, SrcOSRFPkgGenerator, SrcROSPkgGenerator
+from srcs_apt import SrcAptBase, SrcOSRFPkgGenerator, SrcROSRepoGenerator
 from srcs_local import SrcLocalDir
 from abi_executor import ABIExecutor
 from utils import _check_call
@@ -8,8 +8,8 @@ from glob import glob
 class TestFlags(unittest.TestCase):
     def setUp(self):
         self.osrf = SrcOSRFPkgGenerator('test_osrf')
-        self.ros1 = SrcROSPkgGenerator('test_ros', 'melodic')
-        self.ros2 = SrcROSPkgGenerator('test_ros', 'dashing')
+        self.ros1 = SrcROSRepoGenerator('test_ros', 'melodic')
+        self.ros2 = SrcROSRepoGenerator('test_ros', 'dashing')
         self.abi_exe = ABIExecutor()
 
     def test_check_osrf_flags(self):
