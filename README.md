@@ -1,4 +1,4 @@
-# Auto generation of ABI report
+# Auto generation of ABI report [![Build Status](https://travis-ci.org/osrf/auto-abi-checker.svg?branch=master)](https://travis-ci.org/osrf/auto-abi-checker)
 
 > Tool designed to facilitate the run the great [ABI compliance checker](https://lvc.github.io/abi-compliance-checker/)
 by supporting easy inputs and no configuration files
