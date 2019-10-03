@@ -15,4 +15,4 @@ install:
     #  - cd abi-compliance-checker
     #  - perl Makefile.pl -install --prefix=/usr
 script:
-  - python3 *_TEST.py
+  - python3 *_TEST.py || find /tmp -name log.txt -exec cat {} \;
