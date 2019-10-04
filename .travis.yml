@@ -1,5 +1,5 @@
 sudo: required
-dist: xenial
+dist: bionic
 language: python
 python:
   - "3.5"
@@ -9,7 +9,8 @@ before_install:
   - sudo bash -c 'echo "deb [trusted=yes] http://packages.ros.org/ros/ubuntu xenial main" > /etc/apt/sources.list.d/ros-latest.list'
   - sudo apt-get update -qq
 install:
-  - sudo apt-get install -qq python3-rosdep python3
+  # need ignition, tinyxml for testing
+  - sudo apt-get install -qq python3-rosdep python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev
   - pip install rosdistro
 script:
-  - python3 *_TEST.py
+  - python3 *_TEST.py || find /tmp -name log.txt -exec cat {} \;
