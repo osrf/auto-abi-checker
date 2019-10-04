@@ -1,5 +1,6 @@
 import unittest
-from srcs_apt import SrcAptBase, SrcOSRFPkgGenerator, SrcROSRepoGenerator
+from srcs_apt import SrcAptBase, SrcOSRFPkgGenerator
+from srcs_ros import SrcROSRepoGenerator
 from srcs_local import SrcLocalDir
 from abi_executor import ABIExecutor
 from utils import _check_call
