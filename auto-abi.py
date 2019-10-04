@@ -9,7 +9,7 @@ Usage:
         auto-abi --version
 
 orig-type:
-        ros-pkg                 Code to check is a ROS package
+        ros-repo                Code to check is a ROS repository
                                 Use repository name for value (i.e gazebo_ros_pkgs)
         osrf-pkg                Code to check is a OSRF package
                                 Use repository name for value (i.e. sdformat7)
@@ -41,7 +41,7 @@ def normalize_args(args):
 
 
 def check_type(value_type):
-    if (value_type == 'ros-pkg' or
+    if (value_type == 'ros-repo' or
         value_type == 'osrf-pkg' or
         value_type == 'local-dir'):
         True

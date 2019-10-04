@@ -54,7 +54,7 @@ class SrcOSRFPkgGenerator(SrcAptBase):
         return ["lib" + osrf_repo, "lib" + osrf_repo + "-dev"]
 
 
-class SrcROSPkgGenerator(SrcAptBase):
+class SrcROSRepoGenerator(SrcAptBase):
     def __init__(self, name, ros_distro=''):
         SrcAptBase.__init__(self, name)
         self.ros_distro = self.detect_ros_distribution(ros_distro)
