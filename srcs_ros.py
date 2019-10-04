@@ -4,7 +4,7 @@
 # Licensed under the Apache License, Version 2.0
 
 import rosdistro
-from utils import error
+from utils import error, comma_list_to_array
 from os import chdir, environ
 from srcs_apt import SrcAptBase
 
@@ -12,7 +12,7 @@ from os.path import dirname, realpath, join
 
 
 class SrcROSBase(SrcAptBase):
-    def __init__(self, name, ros_distro=''):
+    def __init__(self, name, ros_distro):
         SrcAptBase.__init__(self, name)
         self.ros_distro = self.detect_ros_distribution(ros_distro)
         self.rosdistro_index = rosdistro.get_index(rosdistro.get_index_url())
@@ -35,9 +35,12 @@ class SrcROSBase(SrcAptBase):
     def detect_ros_distribution(self, user_ros_distro):
         if user_ros_distro:
             return user_ros_distro
-        if environ['ROS_DISTRO']:
-            return environ['ROS_DISTRO']
-        error("Not ROS distribution provided or ROS_DISTRO environment var")
+        try:
+            if environ['ROS_DISTRO']:
+                return environ['ROS_DISTRO']
+            error("Not ROS distribution provided or ROS_DISTRO environment var")
+        except KeyError:
+            error("ROS_DISTRO environment variable not found")
 
     def get_debian_package_name_prefix(self):
         return 'ros-%s-' % self.ros_distro
@@ -50,7 +53,7 @@ class SrcROSBase(SrcAptBase):
 
 class SrcROSRepoGenerator(SrcROSBase):
     def __init__(self, name, ros_distro=''):
-        SrcROSBase.__init__(name, ros_distro)
+        SrcROSBase.__init__(self, name, ros_distro)
 
     def validate_repo(self, ros_repo):
         keys = self.distro_file.repositories.keys()
@@ -72,3 +75,24 @@ class SrcROSRepoGenerator(SrcROSBase):
         ros_pkgs = self.get_release_repo(ros_repo).package_names
         return [self.get_debian_ros_package_name(p)
                 for p in ros_pkgs]
+
+
+class SrcROSPkgGenerator(SrcROSBase):
+    def __init__(self, name, ros_distro=''):
+        SrcROSBase.__init__(self, name, ros_distro)
+        self.ros_deb_packages = []
+
+    def is_debian_package(self, pkg):
+        if pkg.startswith('ros-'):
+            return True
+        return False
+
+    def validate(self, ros_pkgs):
+        for pkg in comma_list_to_array(ros_pkgs):
+            deb_pkg = pkg
+            if not self.is_debian_package(pkg):
+                deb_pkg = self.get_debian_ros_package_name(pkg)
+            self.ros_deb_packages.append(deb_pkg)
+
+    def get_deb_package_names(self, ros_pkgs):
+        return self.ros_deb_packages

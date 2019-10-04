@@ -9,12 +9,16 @@ Usage:
         auto-abi --version
 
 orig-type:
-        ros-repo                Code to check is a ROS repository
-                                Use repository name for value (i.e gazebo_ros_pkgs)
-        osrf-pkg                Code to check is a OSRF package
-                                Use repository name for value (i.e. sdformat7)
         local-dir               Code to check is a local directory
                                 Use full path to installation dir
+        osrf-pkg                Code to check is a OSRF package
+                                Use repository name for value (i.e. sdformat7)
+        ros-pkg                 Use the ROS package name. It can be fully qualified
+                                (i.e ros-melodic-gazebo-dev) or a ROS name
+                                (i.e gazebo_dev). Multiple packages are supported,
+                                comma separated.
+        ros-repo                Code to check is a ROS repository
+                                Use repository name for value (i.e gazebo_ros_pkgs)
 
 Options:
         -h --help               Show this screen
@@ -42,6 +46,7 @@ def normalize_args(args):
 
 def check_type(value_type):
     if (value_type == 'ros-repo' or
+        value_type == 'ros-pkg' or
         value_type == 'osrf-pkg' or
         value_type == 'local-dir'):
         True

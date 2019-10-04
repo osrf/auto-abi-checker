@@ -18,6 +18,7 @@ def _check_call(cmd):
 
     return 0
 
+
 def error(msg):
     print("\n [err] " + msg + "\n", file=stderr)
     exit(-1)
@@ -25,3 +26,10 @@ def error(msg):
 
 def warn(msg):
     print("\n [warn] " + msg + "\n", file=stderr)
+
+
+def comma_list_to_array(str_input):
+    if "," in str_input:
+        return str_input.split(",")
+
+    return [str_input]
