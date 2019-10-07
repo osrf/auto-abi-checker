@@ -7,8 +7,20 @@ from subprocess import check_call
 from sys import stderr
 
 
+def main_step_info(msg):
+    print("* %s" % msg)
+
+
+def info(msg):
+    print(" - %s" % msg)
+
+
+def subinfo(msg):
+    print("   - %s" % msg)
+
+
 def _check_call(cmd):
-    print(" - Run '%s'" % ' '.join(cmd))
+    info("Run " + " ".join(cmd))
 
     try:
         check_call(cmd)
