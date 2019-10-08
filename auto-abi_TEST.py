@@ -68,5 +68,19 @@ class TestROSPkg(unittest.TestCase):
         self.rospkg.run('ros-melodic-rosclean,ros-melodic-cpp-common')
 
 
+class TestROSPkg(unittest.TestCase):
+    def setUp(self):
+        self.rospkg = SrcROSPkgGenerator('test_ros_pkg', 'melodic')
+
+    def test_deb_pkg_name(self):
+        self.rospkg.run('ros-melodic-cpp-common')
+
+    def test_ros_pkg_name(self):
+        self.rospkg.run('cpp_common')
+
+    def test_ros_multiple_names(self):
+        self.rospkg.run('ros-melodic-rosclean,ros-melodic-cpp-common')
+
+
 if __name__ == '__main__':
     unittest.main()
