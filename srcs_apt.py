@@ -29,7 +29,7 @@ class SrcAptBase(SrcBase):
         for p in package_names:
             # run_apt_update
             chdir(self.ws)
-            _check_call(['apt-get', 'download', p])
+            _check_call(['apt-get', 'download', '-qq', p])
 
     def run_apt_update(self):
         _check_call(['apt-get', 'update'])

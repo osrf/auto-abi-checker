@@ -3,6 +3,7 @@
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 
+import subprocess
 from tempfile import mkdtemp
 from os import chdir
 from os.path import join
@@ -14,11 +15,11 @@ class ABIExecutor():
         self.bin = 'abi-compliance-checker'
         self.ws = mkdtemp()
         self.ws_abi_dump = join(self.ws, 'abi_dumps')
-        self.ws_report = join(self.ws, 'compat_reports')
+        self.ws_report = join(self.ws, 'compat_reports', 'X_to_X')
         self.report_name = 'test_name_report'
         self.compilation_flags = compilation_flags
 
-    def run(self, orig_src, new_src):
+    def run(self, orig_src, new_src, report_dir=''):
         # Use orig value as report name
         self.report_name = orig_src.name
         # if compilation_flags is set respect the value
@@ -26,6 +27,8 @@ class ABIExecutor():
             self.compilation_flags = self.get_compilation_flags(
                     orig_src, new_src)
         chdir(self.ws)
+        if report_dir:
+            self.ws_report = report_dir
         if self.dump(orig_src) != 0:
             error("ABI Dump from " + str(orig_src) + " failed")
         if self.dump(new_src) !=0:
@@ -43,17 +46,26 @@ class ABIExecutor():
                     src_class.name, 'X', 'ABI.dump')
 
     def get_compat_report_file(self):
-        return join(self.ws_report, self.report_name,
-                    'X_to_X', 'compat_report.html')
+        return join(self.ws_report, 'compat_report.html')
 
     def dump(self, src_class):
-        return _check_call([self.bin,
-                            '-l', src_class.name,
-                            '-dump', src_class.ws_files,
-                            '-gcc-options', self.compilation_flags])
+        cmd = [self.bin,
+               '-l', src_class.name,
+               '-dump', src_class.ws_files,
+               '-gcc-options', self.compilation_flags]
+        print(" - Run '%s'" % ' '.join(cmd))
+        try:
+            subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as e:
+            if "library objects are not found".encode('utf-8') in e.output:
+                error("No lib objects found in " + str(src_class))
+            return 1
+
+        return 0
 
     def generate_report(self, orig_src, new_src):
         _check_call([self.bin,
                      '-l', self.report_name,
+                     '-report-path', self.get_compat_report_file(),
                      '-old', self.get_dump_file(orig_src),
                      '-new', self.get_dump_file(new_src)])

@@ -4,7 +4,7 @@
 # Licensed under the Apache License, Version 2.0
 """
 Usage:
-        auto-abi --orig-type <orig-type> --orig <orig> --new-type <new-type> --new <new>
+        auto-abi --orig-type <orig-type> --orig <orig> --new-type <new-type> --new <new> [--report-dir <dir>]
         auto-abi (-h | --help)
         auto-abi --version
 
@@ -38,10 +38,12 @@ def normalize_args(args):
     new_type = args["<new-type>"]
     new_value = args["<new>"]
 
+    report_dir = args["<dir>"]
+
     # repo_name = args["<repo-name>"] if args["<repo-name>"] else "osrf"
     # repo_type = args["<repo-type>"] if args["<repo-type>"] else "stable"
 
-    return orig_type, orig_value, new_type, new_value
+    return orig_type, orig_value, new_type, new_value, report_dir
 
 
 def check_type(value_type):
@@ -55,7 +57,7 @@ def check_type(value_type):
 
 
 def validate_input(args):
-    orig_type, orig_value, new_type, new_valie = args
+    orig_type, orig_value, new_type, new_value, report_dir = args
 
     if (check_type(orig_type) and check_type(new_type)):
         return True
@@ -64,7 +66,7 @@ def validate_input(args):
 
 
 def process_input(args):
-    orig_type, orig_value, new_type, new_value = args
+    orig_type, orig_value, new_type, new_value, report_dir = args
 
     generator = SrcGenerator()
     src_gen = generator.generate(orig_type, 'orig')
@@ -73,13 +75,12 @@ def process_input(args):
     new_gen.run(new_value)
 
     abi_exe = ABIExecutor()
-    abi_exe.run(src_gen, new_gen)
+    abi_exe.run(src_gen, new_gen, report_dir)
 
 
 def main():
     try:
         args = normalize_args(docopt(__doc__, version="auto-abi 0.1.0"))
-        # ºconfig = load_config_file()
         validate_input(args)
         process_input(args)
     except KeyboardInterrupt:
