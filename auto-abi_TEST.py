@@ -47,11 +47,11 @@ class TestBase(unittest.TestCase):
         self.orig_class = SrcTestPkg('test_pkg')
         self.new_class = SrcLocalDir('test_local_dir')
 
-    # def test_run_apt(self):
-    #    self.orig_class.run('stub')
-    #    self.new_class.run('test/files')
-    #    abi_exe = ABIExecutor('--std=c++17')
-    #    abi_exe.run(self.orig_class, self.new_class)
+    def test_run_apt(self):
+        self.orig_class.run('stub')
+        self.new_class.run('test/files')
+        abi_exe = ABIExecutor('--std=c++17')
+        abi_exe.run(self.orig_class, self.new_class)
 
 
 class TestROSPkg(unittest.TestCase):
