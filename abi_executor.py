@@ -19,7 +19,7 @@ class ABIExecutor():
         self.report_name = 'test_name_report'
         self.compilation_flags = compilation_flags
 
-    def run(self, orig_src, new_src, report_dir):
+    def run(self, orig_src, new_src, report_dir=''):
         # Use orig value as report name
         self.report_name = orig_src.name
         # if compilation_flags is set respect the value
