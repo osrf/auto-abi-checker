@@ -7,7 +7,7 @@ import subprocess
 from tempfile import mkdtemp
 from os import chdir
 from os.path import join
-from utils import _check_call, error
+from utils import _check_call, error, info, subinfo, main_step_info
 
 
 class ABIExecutor():
@@ -18,10 +18,13 @@ class ABIExecutor():
         self.ws_report = join(self.ws, 'compat_reports', 'X_to_X')
         self.report_name = 'test_name_report'
         self.compilation_flags = compilation_flags
+        self.no_fail_if_emtpy = False
+        self.empty_objects_found = False
 
-    def run(self, orig_src, new_src, report_dir=''):
+    def run(self, orig_src, new_src, report_dir='', no_fail_if_emtpy=False):
         # Use orig value as report name
         self.report_name = orig_src.name
+        self.no_fail_if_emtpy = no_fail_if_emtpy
         # if compilation_flags is set respect the value
         if not self.compilation_flags:
             self.compilation_flags = self.get_compilation_flags(
@@ -34,7 +37,6 @@ class ABIExecutor():
         if self.dump(new_src) !=0:
             error("ABI Dump from " + str(new_src) + " failed")
         self.generate_report(orig_src, new_src)
-        print("* Generated: " + self.get_compat_report_file())
 
     def get_compilation_flags(self, orig_src, new_src):
         r = list(orig_src.compilation_flags)
@@ -58,14 +60,23 @@ class ABIExecutor():
             subprocess.check_output(cmd, stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             if "library objects are not found".encode('utf-8') in e.output:
+                self.empty_objects_found = True
+                if self.no_fail_if_emtpy:
+                    subinfo("Skip error on no object found")
+                    return 0
                 error("No lib objects found in " + str(src_class))
             return 1
 
         return 0
 
     def generate_report(self, orig_src, new_src):
+        if self.empty_objects_found:
+            main_step_info("No report generated since empty dumps were found")
+            return 0
+
         _check_call([self.bin,
                      '-l', self.report_name,
                      '-report-path', self.get_compat_report_file(),
                      '-old', self.get_dump_file(orig_src),
                      '-new', self.get_dump_file(new_src)])
+        main_step_info("Generated: " + self.get_compat_report_file())

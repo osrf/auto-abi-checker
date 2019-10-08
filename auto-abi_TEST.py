@@ -6,6 +6,7 @@ from abi_executor import ABIExecutor
 from utils import _check_call
 from glob import glob
 
+
 class TestFlags(unittest.TestCase):
     def setUp(self):
         self.osrf = SrcOSRFPkgGenerator('test_osrf')
@@ -52,20 +53,6 @@ class TestBase(unittest.TestCase):
         self.new_class.run('test/files')
         abi_exe = ABIExecutor('--std=c++17')
         abi_exe.run(self.orig_class, self.new_class)
-
-
-class TestROSPkg(unittest.TestCase):
-    def setUp(self):
-        self.rospkg = SrcROSPkgGenerator('test_ros_pkg', 'melodic')
-
-    def test_deb_pkg_name(self):
-        self.rospkg.run('ros-melodic-cpp-common')
-
-    def test_ros_pkg_name(self):
-        self.rospkg.run('cpp_common')
-
-    def test_ros_multiple_names(self):
-        self.rospkg.run('ros-melodic-rosclean,ros-melodic-cpp-common')
 
 
 class TestROSPkg(unittest.TestCase):

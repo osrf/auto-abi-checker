@@ -6,6 +6,7 @@
 from tempfile import mkdtemp
 from glob import glob
 from os.path import join
+from utils import main_step_info
 
 
 class SrcBase:
@@ -14,7 +15,7 @@ class SrcBase:
         self.ws = mkdtemp()
         self.ws_files = join(self.ws, 'files')
         self.compilation_flags = []
-        print("* Init " + self.name + " -::- " + "workspace: " + self.ws)
+        main_step_info("Init " + self.name + " -::- " + "workspace: " + self.ws)
 
     def __str__(self):
         return "'" + self.name + "' at " + str(self.ws)
