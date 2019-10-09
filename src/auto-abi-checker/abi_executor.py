@@ -7,7 +7,7 @@ import subprocess
 from tempfile import mkdtemp
 from os import chdir
 from os.path import join
-from utils import _check_call, error, info, subinfo, main_step_info
+from .utils import _check_call, error, info, subinfo, main_step_info
 
 
 class ABIExecutor():

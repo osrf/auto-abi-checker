@@ -28,9 +28,9 @@ Options:
 """
 
 from docopt import docopt
-from generator import SrcGenerator
-from abi_executor import ABIExecutor
-from utils import error
+from .generator import SrcGenerator
+from .abi_executor import ABIExecutor
+from .utils import error
 
 
 def normalize_args(args):
