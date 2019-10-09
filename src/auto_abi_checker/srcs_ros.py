@@ -4,9 +4,9 @@
 # Licensed under the Apache License, Version 2.0
 
 import rosdistro
-from utils import error, comma_list_to_array
+from .utils import error, comma_list_to_array
 from os import chdir, environ
-from srcs_apt import SrcAptBase
+from .srcs_apt import SrcAptBase
 
 from os.path import dirname, realpath, join
 

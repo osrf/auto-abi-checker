@@ -3,9 +3,9 @@
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 
-from utils import _check_call, error
 from os import chdir, environ
-from srcs_base import SrcBase
+from auto_abi_checker.utils import _check_call
+from auto_abi_checker.srcs_base import SrcBase
 
 
 class SrcAptBase(SrcBase):
@@ -18,7 +18,7 @@ class SrcAptBase(SrcBase):
         self.download_deb_packages(pkgs)
         self.extract_deb_files()
 
-    # override if needed validation
+    # override if need validation
     def validate(self, value):
         True
 

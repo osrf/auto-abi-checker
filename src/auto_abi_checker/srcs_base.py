@@ -6,7 +6,7 @@
 from tempfile import mkdtemp
 from glob import glob
 from os.path import join
-from utils import main_step_info
+from .utils import main_step_info
 
 
 class SrcBase:

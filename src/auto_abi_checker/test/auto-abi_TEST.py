@@ -1,3 +1,4 @@
+import os
 import unittest
 from auto_abi_checker.srcs_apt import SrcAptBase, SrcOSRFPkgGenerator
 from auto_abi_checker.srcs_ros import SrcROSRepoGenerator, SrcROSPkgGenerator
@@ -33,12 +34,16 @@ class TestFlags(unittest.TestCase):
 class SrcTestPkg(SrcAptBase):
     def __init__(self, name):
         SrcAptBase.__init__(self, name)
+        self.test_dir = os.path.dirname(os.path.abspath(__file__))
+        self.test_files_dir = os.path.join(self.test_dir, 'files')
+        self.test_debs_dir = os.path.join(self.test_dir, 'debs')
+
 
     def get_deb_package_names(self, stub):
         return ['libsdformat8', 'libsdformat8-dev']
 
     def download_deb_packages(self, stub):
-        test_pkgs = glob('test/debs/*.deb')
+        test_pkgs = glob(self.test_debs_dir + '/*.deb')
         for p in test_pkgs:
             _check_call(['cp', p, self.ws])
 
@@ -47,10 +52,12 @@ class TestBase(unittest.TestCase):
     def setUp(self):
         self.orig_class = SrcTestPkg('test_pkg')
         self.new_class = SrcLocalDir('test_local_dir')
+        self.test_dir = os.path.dirname(os.path.abspath(__file__))
+        self.test_files_dir = os.path.join(self.test_dir, 'files')
 
     def test_run_apt(self):
         self.orig_class.run('stub')
-        self.new_class.run('test/files')
+        self.new_class.run(self.test_files_dir)
         abi_exe = ABIExecutor('--std=c++17')
         abi_exe.run(self.orig_class, self.new_class)
 
