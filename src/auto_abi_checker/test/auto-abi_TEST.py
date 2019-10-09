@@ -1,9 +1,9 @@
 import unittest
-from auto-abi-checker.srcs_apt import SrcAptBase, SrcOSRFPkgGenerator
-from auto-abi-checker.srcs_ros import SrcROSRepoGenerator, SrcROSPkgGenerator
-from auto-abi-checker.srcs_local import SrcLocalDir
-from auto-abi-checker.abi_executor import ABIExecutor
-from auto-abi-checker.utils import _check_call
+from auto_abi_checker.srcs_apt import SrcAptBase, SrcOSRFPkgGenerator
+from auto_abi_checker.srcs_ros import SrcROSRepoGenerator, SrcROSPkgGenerator
+from auto_abi_checker.srcs_local import SrcLocalDir
+from auto_abi_checker.abi_executor import ABIExecutor
+from auto_abi_checker.utils import _check_call
 from glob import glob
 
 

@@ -2,11 +2,17 @@
 
 import os
 from setuptools import setup
+import unittest
 
 install_requires = [
     'docopt',
     'rosdep',
 ]
+
+def my_test_suite():
+    test_loader = unittest.TestLoader()
+    test_suite = test_loader.discover('src/auto_abi_checker/tests', pattern='*_TEST.py')
+    return test_suite
 
 kwargs = {
     'name': 'auto-abi-checker',
@@ -29,4 +35,4 @@ kwargs = {
     'url': 'https://github.com/osrf/auto-abi-checker'
 }
 
-setup(**kwargs)
+setup(**kwargs, test_suite='setup.my_test_suite')
