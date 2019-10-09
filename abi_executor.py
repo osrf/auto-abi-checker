@@ -20,6 +20,7 @@ class ABIExecutor():
         self.compilation_flags = compilation_flags
         self.no_fail_if_emtpy = False
         self.empty_objects_found = False
+        self.report_generated = False
 
     def run(self, orig_src, new_src, report_dir='', no_fail_if_emtpy=False):
         # Use orig value as report name
@@ -80,3 +81,38 @@ class ABIExecutor():
                      '-old', self.get_dump_file(orig_src),
                      '-new', self.get_dump_file(new_src)])
         main_step_info("Generated: " + self.get_compat_report_file())
+
+        self.report_generated = True
+
+    def is_binary_compatible(self):
+        if self.empty_objects_found:
+            return True
+
+        if not self.report_generated:
+            error("No report generated")
+
+        with open(self.get_compat_report_file()) as f:
+            content = f.read()
+            if 'Binary Compatibility' in content:
+                f.close()
+                return True
+        f.close()
+        return False
+
+    def is_source_compatible(self):
+        if self.empty_objects_found:
+            return True
+
+        if not self.report_generated:
+            error("No report generated")
+
+        with open(self.get_compat_report_file()) as f:
+            content = f.read()
+            if 'Source Compatibility' in content:
+                f.close()
+                return True
+        f.close()
+        return False
+
+    def is_compatible(self):
+        return self.is_source_compatible() and self.is_binary_compatible()

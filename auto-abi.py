@@ -4,7 +4,7 @@
 # Licensed under the Apache License, Version 2.0
 """
 Usage:
-        auto-abi --orig-type <orig-type> --orig <orig> --new-type <new-type> --new <new> [--report-dir <dir>] [--no-fail-if-empty]
+        auto-abi --orig-type <orig-type> --orig <orig> --new-type <new-type> --new <new> [--report-dir <dir>] [--no-fail-if-empty] [--fail-if-incompatible]
         auto-abi (-h | --help)
         auto-abi --version
 
@@ -25,6 +25,7 @@ Options:
         --version               Show auto-abi version
         --report_dir <dir>      Generate compat report in <dir>
         --no-fail-if-empty      Return 0 if the abi checker does not found object files
+        --fail-if-incompatible  Return -1 if the tool report problems on ABI checking
 """
 
 from docopt import docopt
@@ -42,11 +43,12 @@ def normalize_args(args):
 
     report_dir = args["<dir>"]
     no_fail_if_emtpy = args["--no-fail-if-empty"]
+    fail_if_incompatible = args["--fail-if-incompatible"]
 
     # repo_name = args["<repo-name>"] if args["<repo-name>"] else "osrf"
     # repo_type = args["<repo-type>"] if args["<repo-type>"] else "stable"
 
-    return orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy
+    return orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy, fail_if_incompatible
 
 
 def check_type(value_type):
@@ -60,7 +62,7 @@ def check_type(value_type):
 
 
 def validate_input(args):
-    orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy = args
+    orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy, fail_if_incompatible = args
 
     if (check_type(orig_type) and check_type(new_type)):
         return True
@@ -69,7 +71,7 @@ def validate_input(args):
 
 
 def process_input(args):
-    orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy = args
+    orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy, fail_if_incompatible = args
 
     generator = SrcGenerator()
     src_gen = generator.generate(orig_type, 'orig')
@@ -80,6 +82,9 @@ def process_input(args):
     abi_exe = ABIExecutor()
     abi_exe.run(src_gen, new_gen, report_dir, no_fail_if_emtpy)
 
+    if fail_if_incompatible:
+        if not abi_exe.is_compatible():
+            return -1
 
 def main():
     try:
