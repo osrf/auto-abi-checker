@@ -3,7 +3,7 @@
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 
-from .utils import _check_call, error
+from .utils import _check_call, error, info
 from .srcs_base import SrcBase
 
 from os import path, listdir
@@ -25,4 +25,5 @@ class SrcLocalDir(SrcBase):
         self.copy_files(directory)
 
     def copy_files(self, directory):
+        info("Run copytree from  " + directory + " to " + self.ws_files)
         copytree(directory, self.ws_files)

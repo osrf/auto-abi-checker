@@ -22,6 +22,7 @@ class ABIExecutor():
         self.empty_objects_found = False
 
     def run(self, orig_src, new_src, report_dir='', no_fail_if_emtpy=False):
+        main_step_info("Run abichecker")
         # Use orig value as report name
         self.report_name = orig_src.name
         self.no_fail_if_emtpy = no_fail_if_emtpy
