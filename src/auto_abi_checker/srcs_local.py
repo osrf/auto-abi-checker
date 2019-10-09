@@ -3,8 +3,8 @@
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 
-from .utils import _check_call, error, info
-from .srcs_base import SrcBase
+from auto_abi_checker.utils import _check_call, error, info
+from auto_abi_checker.srcs_base import SrcBase
 
 from os import path, listdir
 from shutil import copytree

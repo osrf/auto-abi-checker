@@ -3,10 +3,10 @@
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 
-from .srcs_apt import SrcOSRFPkgGenerator
-from .srcs_ros import SrcROSRepoGenerator, SrcROSPkgGenerator
-from .srcs_local import SrcLocalDir
-from .utils import error
+from auto_abi_checker.srcs_apt import SrcOSRFPkgGenerator
+from auto_abi_checker.srcs_ros import SrcROSRepoGenerator, SrcROSPkgGenerator
+from auto_abi_checker.srcs_local import SrcLocalDir
+from auto_abi_checker.utils import error
 
 
 class SrcGenerator:
