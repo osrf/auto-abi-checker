@@ -7,7 +7,7 @@ import subprocess
 from tempfile import mkdtemp
 from os import chdir
 from os.path import join
-from utils import _check_call, error, info, subinfo, main_step_info
+from auto_abi_checker.utils import _check_call, error, info, subinfo, main_step_info
 
 
 class ABIExecutor():
@@ -22,6 +22,7 @@ class ABIExecutor():
         self.empty_objects_found = False
 
     def run(self, orig_src, new_src, report_dir='', no_fail_if_emtpy=False):
+        main_step_info("Run abichecker")
         # Use orig value as report name
         self.report_name = orig_src.name
         self.no_fail_if_emtpy = no_fail_if_emtpy
@@ -74,9 +75,13 @@ class ABIExecutor():
             main_step_info("No report generated since empty dumps were found")
             return 0
 
-        _check_call([self.bin,
-                     '-l', self.report_name,
-                     '-report-path', self.get_compat_report_file(),
-                     '-old', self.get_dump_file(orig_src),
-                     '-new', self.get_dump_file(new_src)])
+        result = _check_call([self.bin,
+                             '-l', self.report_name,
+                             '-report-path', self.get_compat_report_file(),
+                             '-old', self.get_dump_file(orig_src),
+                             '-new', self.get_dump_file(new_src)])
+
+        if result != 0:
+            return result
+
         main_step_info("Generated: " + self.get_compat_report_file())

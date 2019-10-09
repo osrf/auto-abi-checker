@@ -3,9 +3,9 @@
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 
-from utils import _check_call, error
 from os import chdir, environ
-from srcs_base import SrcBase
+from auto_abi_checker.utils import _check_call, error
+from auto_abi_checker.srcs_base import SrcBase
 
 
 class SrcAptBase(SrcBase):
@@ -18,7 +18,7 @@ class SrcAptBase(SrcBase):
         self.download_deb_packages(pkgs)
         self.extract_deb_files()
 
-    # override if needed validation
+    # override if need validation
     def validate(self, value):
         True
 
@@ -29,7 +29,9 @@ class SrcAptBase(SrcBase):
         for p in package_names:
             # run_apt_update
             chdir(self.ws)
-            _check_call(['apt-get', 'download', '-qq', p])
+            result = _check_call(['apt-get', 'download', '-qq', p])
+            if result != 0:
+                error("Failed to download")
 
     def run_apt_update(self):
         _check_call(['apt-get', 'update'])
@@ -37,7 +39,9 @@ class SrcAptBase(SrcBase):
     def extract_deb_files(self):
         files = self.list_files('*.deb')
         for f in files:
-            _check_call(['dpkg', '-x', f, self.ws_files])
+            result = _check_call(['dpkg', '-x', f, self.ws_files])
+            if result != 0:
+                error("Failed to extract files")
 
 
 class SrcOSRFPkgGenerator(SrcAptBase):

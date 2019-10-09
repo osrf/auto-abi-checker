@@ -13,4 +13,4 @@ install:
   - sudo apt-get install -qq python3-rosdep python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev
   - pip install rosdistro
 script:
-  - python3 *_TEST.py || find /tmp -name log.txt -exec cat {} \;
+  - python3 setup.py test || find /tmp -name log.txt -exec cat {} \;
