@@ -6,7 +6,7 @@ import unittest
 
 install_requires = [
     'docopt',
-    'rosdep',
+    'rosdistro',
 ]
 
 def discover_tests():
