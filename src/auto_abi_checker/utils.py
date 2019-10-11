@@ -31,9 +31,13 @@ def _check_call(cmd):
     return 0
 
 
+class AppError(Exception):
+    pass
+
+
 def error(msg):
     print("\n [err] " + msg + "\n", file=stderr)
-    exit(-1)
+    raise AppError()
 
 
 def warn(msg):
