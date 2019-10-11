@@ -22,12 +22,7 @@ def subinfo(msg):
 def _check_call(cmd):
     info("Run " + " ".join(cmd))
 
-    try:
-        check_call(cmd)
-    except Exception as e:
-        print(str(e))
-        return e
-
+    check_call(cmd)
     return 0
 
 

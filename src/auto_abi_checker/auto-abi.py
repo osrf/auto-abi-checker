@@ -93,7 +93,7 @@ def process_input(args):
             info("Execution time: " + str(datetime.timedelta(seconds=exec_time)))
     except Exception as e:
         if never_fail:
-            print("[err] return 0 since --never-fail option is enabled", file=stderr)
+            print("[warn] detected errors but return 0 since --never-fail option is enabled", file=stderr)
         else:
             exit(-1)
 
