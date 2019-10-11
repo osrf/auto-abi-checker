@@ -16,7 +16,7 @@ def discover_tests():
 
 kwargs = {
     'name': 'auto_abi_checker',
-    'version': '0.1.0',
+    'version': '0.1.1',
     'packages': ['auto_abi_checker'],
     'package_dir': {'': 'src'},
     'author': 'Jose Luis Rivero',
