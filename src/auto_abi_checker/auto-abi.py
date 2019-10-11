@@ -50,9 +50,6 @@ def normalize_args(args):
     never_fail = args["--never-fail"]
     display_exec_time = args["--display-exec-time"]
 
-    # repo_name = args["<repo-name>"] if args["<repo-name>"] else "osrf"
-    # repo_type = args["<repo-type>"] if args["<repo-type>"] else "stable"
-
     return orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy, never_fail, display_exec_time
 
 
@@ -94,7 +91,7 @@ def process_input(args):
         if display_exec_time:
             exec_time = time() - start
             info("Execution time: " + str(datetime.timedelta(seconds=exec_time)))
-    except AppError:
+    except Exception as e:
         if never_fail:
             print("[err] return 0 since --never-fail option is enabled", file=stderr)
         else:
