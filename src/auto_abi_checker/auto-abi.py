@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
+#!python
 
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 """
 Usage:
-        auto-abi --orig-type <orig-type> --orig <orig> --new-type <new-type> --new <new> [--report-dir <dir>] [--no-fail-if-empty]
+        auto-abi --orig-type <orig-type> --orig <orig> --new-type <new-type> --new <new> [--report-dir <dir>] [--no-fail-if-empty] [--display-exec-time]
         auto-abi (-h | --help)
         auto-abi --version
 
@@ -25,12 +25,15 @@ Options:
         --version               Show auto-abi version
         --report_dir <dir>      Generate compat report in <dir>
         --no-fail-if-empty      Return 0 if the abi checker does not found object files
+        --display-exec-time     Show the execution time of this script
 """
 
+import datetime
+from time import time
 from docopt import docopt
 from auto_abi_checker.generator import SrcGenerator
 from auto_abi_checker.abi_executor import ABIExecutor
-from auto_abi_checker.utils import error
+from auto_abi_checker.utils import error, info
 
 
 def normalize_args(args):
@@ -42,11 +45,12 @@ def normalize_args(args):
 
     report_dir = args["<dir>"]
     no_fail_if_emtpy = args["--no-fail-if-empty"]
+    display_exec_time = args["--display-exec-time"]
 
     # repo_name = args["<repo-name>"] if args["<repo-name>"] else "osrf"
     # repo_type = args["<repo-type>"] if args["<repo-type>"] else "stable"
 
-    return orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy
+    return orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy, display_exec_time
 
 
 def check_type(value_type):
@@ -60,7 +64,7 @@ def check_type(value_type):
 
 
 def validate_input(args):
-    orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy = args
+    orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy, display_exec_time = args
 
     if (check_type(orig_type) and check_type(new_type)):
         return True
@@ -69,7 +73,10 @@ def validate_input(args):
 
 
 def process_input(args):
-    orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy = args
+    orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy, display_exec_time = args
+
+    if display_exec_time:
+        start = time()
 
     generator = SrcGenerator()
     src_gen = generator.generate(orig_type, 'orig')
@@ -80,6 +87,9 @@ def process_input(args):
     abi_exe = ABIExecutor()
     abi_exe.run(src_gen, new_gen, report_dir, no_fail_if_emtpy)
 
+    if display_exec_time:
+        exec_time = time() - start
+        info("Execution time: " + str(datetime.timedelta(seconds=exec_time)))
 
 def main():
     try:
