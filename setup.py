@@ -22,6 +22,8 @@ kwargs = {
     'author': 'Jose Luis Rivero',
     'author_email': 'jrivero@osrfoundation.org',
     'classifiers': [
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: Apache Software License'
@@ -34,6 +36,7 @@ kwargs = {
     'install_requires': install_requires,
     'url': 'https://github.com/osrf/auto-abi-checker',
     'test_suite': 'src/auto_abi_checker/test/auto-abi_TEST.py',
+    'download_url': 'https://github.com/osrf/auto-abi-checker/archive/0.1.0.tar.gz',
 }
 
 setup(**kwargs)
