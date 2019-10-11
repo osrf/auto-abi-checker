@@ -36,7 +36,7 @@ kwargs = {
     'install_requires': install_requires,
     'url': 'https://github.com/osrf/auto-abi-checker',
     'test_suite': 'src/auto_abi_checker/test/auto-abi_TEST.py',
-    'download_url': 'https://github.com/osrf/auto-abi-checker/archive/0.1.0.tar.gz',
+    'download_url': 'https://github.com/osrf/auto-abi-checker/archive/0.1.1.tar.gz',
 }
 
 setup(**kwargs)
