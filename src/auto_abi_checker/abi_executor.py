@@ -60,12 +60,16 @@ class ABIExecutor():
         try:
             subprocess.check_output(cmd, stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
-            if "library objects are not found".encode('utf-8') in e.output:
+            error_msg = e.output.decode('utf-8')
+            if "library objects are not found" in error_msg or \
+               "header files are not found" in error_msg:
                 self.empty_objects_found = True
                 if self.no_fail_if_emtpy:
-                    subinfo("Skip error on no object found")
+                    subinfo("Skip error on no headers/objects found")
                     return 0
-                error("No lib objects found in " + str(src_class))
+                error("No headers/objects found in " + str(src_class))
+            # If unknown error print it to help user debug
+            print("\n" + error_msg)
             return 1
 
         return 0
