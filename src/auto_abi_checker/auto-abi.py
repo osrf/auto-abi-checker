@@ -30,6 +30,8 @@ Options:
 """
 
 import datetime
+import re
+import subprocess
 from sys import stderr
 from time import time
 from docopt import docopt
@@ -97,11 +99,18 @@ def process_input(args):
         else:
             exit(-1)
 
+def get_abi_checker_version():
+    output = subprocess.check_output(["abi-compliance-checker", "--version"])
+    vregex = re.compile(r'\d.\d')
+    mo = vregex.search(output.decode("utf-8"))
+    return mo.group(0)
 
 def main():
     try:
-        args = normalize_args(docopt(__doc__, version="auto-abi 0.1.0"))
+        version = "0.1.4"
+        args = normalize_args(docopt(__doc__, version="auto-abi " + version))
         validate_input(args)
+        print("[ auto-abi-checker " + version + " :: abi-compliance-checker " + get_abi_checker_version() + " ] ")
         process_input(args)
     except KeyboardInterrupt:
         print("auto-abi was stopped with a Keyboard Interrupt.\n")
