@@ -31,12 +31,12 @@ class AppError(Exception):
 
 
 def error(msg):
-    print("\n [err] " + msg + "\n", file=stderr)
+    print("\n [err] " + msg, file=stderr)
     raise AppError()
 
 
 def warn(msg):
-    print("\n [warn] " + msg + "\n", file=stderr)
+    print("\n [warn] " + msg, file=stderr)
 
 
 def comma_list_to_array(str_input):
