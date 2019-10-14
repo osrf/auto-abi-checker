@@ -6,7 +6,7 @@
 import subprocess
 from tempfile import mkdtemp
 from os import chdir
-from os.path import join
+from os.path import join, isdir
 from auto_abi_checker.utils import _check_call, error, info, subinfo, main_step_info
 
 
@@ -32,6 +32,8 @@ class ABIExecutor():
                     orig_src, new_src)
         chdir(self.ws)
         if report_dir:
+            if not isdir(report_dir):
+                error("The directory to host the report does not exists: " + report_dir)
             self.ws_report = report_dir
         if self.dump(orig_src) != 0:
             error("ABI Dump from " + str(orig_src) + " failed")
@@ -76,7 +78,9 @@ class ABIExecutor():
 
     def generate_report(self, orig_src, new_src):
         if self.empty_objects_found:
-            main_step_info("No report generated since empty dumps were found")
+            msg = "No real report generated since empty dumps were found"
+            self.generate_fake_report(msg)
+            main_step_info(msg)
             return 0
 
         result = _check_call([self.bin,
@@ -89,3 +93,21 @@ class ABIExecutor():
             return result
 
         main_step_info("Generated: " + self.get_compat_report_file())
+
+    def generate_fake_report(self, msg):
+        html_str = """
+            <!DOCTYPE html>
+            <html>
+            <body>
+
+            <h1>API/ABI API compatibility report by auto-abi-checker</h1>
+
+            <p>""" + msg + """</p>
+
+            </body>
+            </html>
+        """
+
+        report_file = open(self.get_compat_report_file(), "w")
+        report_file.write(html_str)
+        report_file.close()
