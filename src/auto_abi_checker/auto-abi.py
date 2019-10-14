@@ -108,7 +108,7 @@ def get_abi_checker_version():
 
 def main():
     try:
-        version = "0.1.4"
+        version = "0.1.5"
         args = normalize_args(docopt(__doc__, version="auto-abi " + version))
         validate_input(args)
         print("[ auto-abi-checker " + version + " :: abi-compliance-checker " + get_abi_checker_version() + " ] ")
