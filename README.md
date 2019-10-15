@@ -16,6 +16,8 @@ by supporting easy inputs and no configuration files
    Multiple packages are supported, comma separated.
  * **ros-repo:** use the ROS repo name and the tool will download all
    the packages associated with the repository. (i.e: gazebo_ros_pkgs)
+ * **ros-ws:** use full path to the install directory of a ROS workspace
+
 
 ## Examples
 

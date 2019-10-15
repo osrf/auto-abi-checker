@@ -7,7 +7,6 @@ from os import remove
 from pathlib import Path
 from shutil import rmtree
 
-from auto_abi_checker.ros_utils import clean_non_default_dss_files
 
 def remove_dds_files(directory, dds_impl):
     for filename in Path(directory).glob('**/*__rosidl_typesupport_' + dds_impl + '_cpp.h*'):
