@@ -11,7 +11,7 @@ from auto_abi_checker.utils import _check_call, error, info, subinfo, main_step_
 
 
 class ABIExecutor():
-    def __init__(self, tolerance_levels=0, compilation_flags=''):
+    def __init__(self, tolerance_levels='0', compilation_flags=''):
         self.bin = 'abi-compliance-checker'
         self.ws = mkdtemp()
         self.ws_abi_dump = join(self.ws, 'abi_dumps')
