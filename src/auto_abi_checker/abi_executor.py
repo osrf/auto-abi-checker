@@ -5,8 +5,8 @@
 
 import subprocess
 from tempfile import mkdtemp
-from os import chdir
-from os.path import join, isdir
+from os import chdir, makedirs
+from os.path import join, isdir, exists
 from auto_abi_checker.utils import _check_call, error, info, subinfo, main_step_info
 
 
@@ -20,6 +20,7 @@ class ABIExecutor():
         self.compilation_flags = compilation_flags
         self.no_fail_if_emtpy = False
         self.empty_objects_found = False
+        self.compilaton_errors_found = False
 
     def run(self, orig_src, new_src, report_dir='', no_fail_if_emtpy=False):
         main_step_info("Run abichecker")
@@ -37,7 +38,7 @@ class ABIExecutor():
             self.ws_report = report_dir
         if self.dump(orig_src) != 0:
             error("ABI Dump from " + str(orig_src) + " failed")
-        if self.dump(new_src) !=0:
+        if self.dump(new_src) != 0:
             error("ABI Dump from " + str(new_src) + " failed")
         self.generate_report(orig_src, new_src)
 
@@ -46,9 +47,14 @@ class ABIExecutor():
         r.extend(x for x in new_src.compilation_flags if x not in r)
         return " ".join(r)
 
+    def get_dump_dir(self, src_class):
+        return join(self.ws_abi_dump, src_class.name, 'X')
+
     def get_dump_file(self, src_class):
-        return join(self.ws_abi_dump,
-                    src_class.name, 'X', 'ABI.dump')
+        return join(self.get_dump_dir(src_class), 'ABI.dump')
+
+    def get_dump_error_log(self, src_class):
+        return join(self.ws, 'logs', src_class.name, 'X', 'log.txt')
 
     def get_compat_report_file(self):
         return join(self.ws_report, 'compat_report.html')
@@ -63,6 +69,7 @@ class ABIExecutor():
             subprocess.check_output(cmd, stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             error_msg = e.output.decode('utf-8')
+            # check if the error is because no headers/object are found
             if "library objects are not found" in error_msg or \
                "header files are not found" in error_msg:
                 self.empty_objects_found = True
@@ -70,6 +77,17 @@ class ABIExecutor():
                     subinfo("Skip error on no headers/objects found")
                     return 0
                 error("No headers/objects found in " + str(src_class))
+            # check if the error is because compilation problems
+            if "errors occurred when compiling headers" in error_msg:
+                self.compilaton_errors_found = True
+                # print error
+                error_log_str = ""
+                with open(self.get_dump_error_log(src_class)) as log:
+                    error_log_str = log.read()
+                    print(error_log_str)
+                msg = "Compilation problems during compiling headers " + str(src_class)
+                self.generate_fake_report(msg + "<br /><br /><pre>" + error_log_str + "</pre>")
+                error(msg)
             # If unknown error print it to help user debug
             print("\n" + error_msg)
             return 1
@@ -93,6 +111,7 @@ class ABIExecutor():
             return result
 
         main_step_info("Generated: " + self.get_compat_report_file())
+        return 0
 
     def generate_fake_report(self, msg):
         html_str = """
@@ -107,6 +126,8 @@ class ABIExecutor():
             </body>
             </html>
         """
+        if not exists(self.ws_report):
+            makedirs(self.ws_report)
 
         report_file = open(self.get_compat_report_file(), "w")
         report_file.write(html_str)
