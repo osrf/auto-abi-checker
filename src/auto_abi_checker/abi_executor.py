@@ -11,13 +11,14 @@ from auto_abi_checker.utils import _check_call, error, info, subinfo, main_step_
 
 
 class ABIExecutor():
-    def __init__(self, compilation_flags=''):
+    def __init__(self, tolerance_levels=0, compilation_flags=''):
         self.bin = 'abi-compliance-checker'
         self.ws = mkdtemp()
         self.ws_abi_dump = join(self.ws, 'abi_dumps')
         self.ws_report = join(self.ws, 'compat_reports', 'X_to_X')
         self.report_name = 'test_name_report'
         self.compilation_flags = compilation_flags
+        self.tolerance_levels = tolerance_levels
         self.no_fail_if_emtpy = False
         self.empty_objects_found = False
         self.compilaton_errors_found = False
@@ -62,6 +63,7 @@ class ABIExecutor():
     def dump(self, src_class):
         cmd = [self.bin,
                '-l', src_class.name,
+               '-tolerance', self.tolerance_levels,
                '-dump', src_class.ws_files,
                '-gcc-options', self.compilation_flags]
         print(" - Run '%s'" % ' '.join(cmd))
