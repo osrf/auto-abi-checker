@@ -17,6 +17,7 @@ class SrcAptBase(SrcBase):
         pkgs = self.get_deb_package_names(value)
         self.download_deb_packages(pkgs)
         self.extract_deb_files()
+        self.filter_files()
 
     # override if need validation
     def validate(self, value):
@@ -43,6 +44,9 @@ class SrcAptBase(SrcBase):
             if result != 0:
                 error("Failed to extract files")
 
+    # override if need filtering
+    def filter_files(self):
+        True
 
 class SrcOSRFPkgGenerator(SrcAptBase):
     def __init__(self, name):

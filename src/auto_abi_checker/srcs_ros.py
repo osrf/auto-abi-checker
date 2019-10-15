@@ -3,12 +3,13 @@
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 
+from os import environ
+from os.path import join
 import rosdistro
-from auto_abi_checker.utils import error, comma_list_to_array
-from os import chdir, environ
-from auto_abi_checker.srcs_apt import SrcAptBase
 
-from os.path import dirname, realpath, join
+from auto_abi_checker.srcs_apt import SrcAptBase
+from auto_abi_checker.utils import error, comma_list_to_array
+from auto_abi_checker.ros_utils import clean_non_default_dss_files
 
 
 class SrcROSBase(SrcAptBase):
@@ -49,6 +50,9 @@ class SrcROSBase(SrcAptBase):
         return '%s%s' % \
             (self.get_debian_package_name_prefix(),
              ros_package_name.replace('_', '-'))
+
+    def filter_files(self):
+        clean_non_default_dss_files(self.ws_files)
 
 
 class SrcROSRepoGenerator(SrcROSBase):

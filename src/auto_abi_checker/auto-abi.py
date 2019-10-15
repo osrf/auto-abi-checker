@@ -19,6 +19,8 @@ orig-type:
                                 comma separated.
         ros-repo                Code to check is a ROS repository
                                 Use repository name for value (i.e gazebo_ros_pkgs)
+        ros-ws                  Code to check is a ROS workspace
+                                Use full path to install directory of catkin/colcon ws
 
 Options:
         -h --help               Show this screen
@@ -58,6 +60,7 @@ def normalize_args(args):
 def check_type(value_type):
     if (value_type == 'ros-repo' or
         value_type == 'ros-pkg' or
+        value_type == 'ros-ws' or
         value_type == 'osrf-pkg' or
         value_type == 'local-dir'):
         True
@@ -110,7 +113,7 @@ def get_abi_checker_version():
 
 def main():
     try:
-        version = "0.1.5"
+        version = "0.1.6"
         tolerance_levels = "12"
         args = normalize_args(docopt(__doc__, version="auto-abi " + version))
         validate_input(args)

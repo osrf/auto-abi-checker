@@ -5,7 +5,7 @@
 
 from auto_abi_checker.srcs_apt import SrcOSRFPkgGenerator
 from auto_abi_checker.srcs_ros import SrcROSRepoGenerator, SrcROSPkgGenerator
-from auto_abi_checker.srcs_local import SrcLocalDir
+from auto_abi_checker.srcs_local import SrcLocalDir, SrcROSWs
 from auto_abi_checker.utils import error
 
 
@@ -13,8 +13,10 @@ class SrcGenerator:
     def generate(self, src_type, name):
         if (src_type == 'ros-pkg'):
             return SrcROSPkgGenerator(name)
-        if (src_type == 'ros-repo'):
+        elif (src_type == 'ros-repo'):
             return SrcROSRepoGenerator(name)
+        elif (src_type == 'ros-ws'):
+            return SrcROSWs(name)
         elif (src_type == 'osrf-pkg'):
             return SrcOSRFPkgGenerator(name)
         elif (src_type == 'local-dir'):
