@@ -74,7 +74,7 @@ def validate_input(args):
     return False
 
 
-def process_input(args):
+def process_input(args, tolerance_levels):
     orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy, never_fail, display_exec_time = args
 
     if display_exec_time:
@@ -87,7 +87,7 @@ def process_input(args):
         new_gen = generator.generate(new_type, 'new')
         new_gen.run(new_value)
 
-        abi_exe = ABIExecutor()
+        abi_exe = ABIExecutor(tolerance_levels)
         abi_exe.run(src_gen, new_gen, report_dir, no_fail_if_emtpy)
 
         if display_exec_time:
@@ -100,19 +100,24 @@ def process_input(args):
         else:
             exit(-1)
 
+
 def get_abi_checker_version():
     output = subprocess.check_output(["abi-compliance-checker", "--version"])
     vregex = re.compile(r'\d.\d')
     mo = vregex.search(output.decode("utf-8"))
     return mo.group(0)
 
+
 def main():
     try:
         version = "0.1.5"
+        tolerance_levels = "12"
         args = normalize_args(docopt(__doc__, version="auto-abi " + version))
         validate_input(args)
-        print("[ auto-abi-checker " + version + " :: abi-compliance-checker " + get_abi_checker_version() + " ] ")
-        process_input(args)
+        print("[ auto-abi-checker " + version + " :: " +
+              "abi-compliance-checker " + get_abi_checker_version() +
+              " (tolerance: " + tolerance_levels + ") ] ")
+        process_input(args, tolerance_levels)
     except KeyboardInterrupt:
         print("auto-abi was stopped with a Keyboard Interrupt.\n")
 

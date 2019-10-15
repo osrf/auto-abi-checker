@@ -58,7 +58,7 @@ class TestBase(unittest.TestCase):
     def test_run_apt(self):
         self.orig_class.run('stub')
         self.new_class.run(self.test_files_dir)
-        abi_exe = ABIExecutor('--std=c++17')
+        abi_exe = ABIExecutor('12', '--std=c++17')
         abi_exe.run(self.orig_class, self.new_class)
 
 
