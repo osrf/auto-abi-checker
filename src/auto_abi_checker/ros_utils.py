@@ -13,12 +13,12 @@ def remove_dds_files(directory, dds_impl):
         remove(filename)
     for filename in Path(directory).glob('**/*rosidl_typesupport_' + dds_impl + '*.so'):
         remove(filename)
-    for dirname in Path(directory).glob('**/*srv/dds_' + dds_impl):
-        rmtree(dirname)
-    for dirname in Path(directory).glob('**/*msg/dds_' + dds_impl):
-        rmtree(dirname)
-    for dirname in Path(directory).glob('**/*msg/dds_' + dds_impl + "_c"):
-        rmtree(dirname)
+    for t_type in ["srv", "msg", "action"]:
+        for dirname in Path(directory).glob('**/*' + t_type + '/dds_' + dds_impl):
+            rmtree(dirname)
+        for dirname in Path(directory).glob('**/*' + t_type + '/dds_' + dds_impl + "_c"):
+            rmtree(dirname)
+
 
 def clean_non_default_dss_files(directory):
     remove_dds_files(directory, 'opensplice')
