@@ -16,7 +16,7 @@ def discover_tests():
 
 kwargs = {
     'name': 'auto_abi_checker',
-    'version': '0.1.9',
+    'version': '0.1.10',
     'packages': ['auto_abi_checker'],
     'package_dir': {'': 'src'},
     'author': 'Jose Luis Rivero',
@@ -36,7 +36,7 @@ kwargs = {
     'install_requires': install_requires,
     'url': 'https://github.com/osrf/auto-abi-checker',
     'test_suite': 'src/auto_abi_checker/test/auto-abi_TEST.py',
-    'download_url': 'https://github.com/osrf/auto-abi-checker/archive/0.1.9.tar.gz',
+    'download_url': 'https://github.com/osrf/auto-abi-checker/archive/0.1.10.tar.gz',
 }
 
 setup(**kwargs)
