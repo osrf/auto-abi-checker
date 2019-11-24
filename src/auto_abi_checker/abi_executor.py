@@ -6,7 +6,7 @@
 import subprocess
 from tempfile import mkdtemp
 from os import chdir, makedirs
-from os.path import join, isdir, exists
+from os.path import join, isdir, exists, realpath
 from auto_abi_checker.utils import _check_call, error, info, subinfo, main_step_info
 
 
@@ -16,6 +16,7 @@ class ABIExecutor():
         self.ws = mkdtemp()
         self.ws_abi_dump = join(self.ws, 'abi_dumps')
         self.ws_report = join(self.ws, 'compat_reports', 'X_to_X')
+        self.compiler = realpath('/usr/bin/cc')
         self.report_name = 'test_name_report'
         self.compilation_flags = compilation_flags
         self.tolerance_levels = tolerance_levels
@@ -64,6 +65,7 @@ class ABIExecutor():
         cmd = [self.bin,
                '-l', src_class.name,
                '-tolerance', self.tolerance_levels,
+               '--gcc-path', self.compiler,
                '-dump', src_class.ws_files,
                '-gcc-options', self.compilation_flags]
         print(" - Run '%s'" % ' '.join(cmd))
