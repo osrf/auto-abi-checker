@@ -5,7 +5,7 @@
 
 import subprocess
 from tempfile import mkdtemp
-from os import chdir, makedirs
+from os import chdir, makedirs, environ
 from os.path import join, isdir, exists, realpath
 from auto_abi_checker.utils import _check_call, error, info, subinfo, main_step_info
 
@@ -23,12 +23,15 @@ class ABIExecutor():
         self.no_fail_if_emtpy = False
         self.empty_objects_found = False
         self.compilaton_errors_found = False
+        self.auto_abi_cmd_executed = ''
 
-    def run(self, orig_src, new_src, report_dir='', no_fail_if_emtpy=False):
+    def run(self, orig_src, new_src, report_dir='', no_fail_if_emtpy=False,
+            auto_abi_cmd_executed=''):
         main_step_info("Run abichecker")
         # Use orig value as report name
         self.report_name = orig_src.name
         self.no_fail_if_emtpy = no_fail_if_emtpy
+        self.auto_abi_cmd_executed = auto_abi_cmd_executed
         # if compilation_flags is set respect the value
         if not self.compilation_flags:
             self.compilation_flags = self.get_compilation_flags(
@@ -124,6 +127,21 @@ class ABIExecutor():
             <body>
 
             <h1>API/ABI API compatibility report by auto-abi-checker</h1>
+
+        """
+
+        if self.auto_abi_cmd_executed:
+            html_str += """
+                <h2>Reproduce the error locally</h2>
+                <pre>
+                pip3 install -U auto_abi_checker
+                source /opt/ros/""" + environ['ROS_DISTRO'] + """/setup.bash && mkdir -p """ + self.ws_report + """
+                """ + self.auto_abi_cmd_executed + """
+                </pre>
+             """
+
+        html_str += """
+            <h2>Error</h2>
 
             <p>""" + msg + """</p>
 
