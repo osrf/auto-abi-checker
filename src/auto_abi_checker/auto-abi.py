@@ -34,7 +34,7 @@ Options:
 import datetime
 import re
 import subprocess
-from sys import stderr
+from sys import stderr, argv
 from time import time
 from docopt import docopt
 from auto_abi_checker.generator import SrcGenerator
@@ -77,7 +77,7 @@ def validate_input(args):
     return False
 
 
-def process_input(args, tolerance_levels):
+def process_input(args, cmd_executed, tolerance_levels):
     orig_type, orig_value, new_type, new_value, report_dir, no_fail_if_emtpy, never_fail, display_exec_time = args
 
     if display_exec_time:
@@ -91,7 +91,11 @@ def process_input(args, tolerance_levels):
         new_gen.run(new_value)
 
         abi_exe = ABIExecutor(tolerance_levels)
-        abi_exe.run(src_gen, new_gen, report_dir, no_fail_if_emtpy)
+        abi_exe.run(src_gen,
+                    new_gen,
+                    report_dir,
+                    no_fail_if_emtpy,
+                    auto_abi_cmd_executed=cmd_executed)
 
         if display_exec_time:
             exec_time = time() - start
@@ -115,12 +119,13 @@ def main():
     try:
         version = "0.1.10"
         tolerance_levels = "12"
+        cmd_executed = ' '.join(argv[:])
         args = normalize_args(docopt(__doc__, version="auto-abi " + version))
         validate_input(args)
         print("[ auto-abi-checker " + version + " :: " +
               "abi-compliance-checker " + get_abi_checker_version() +
               " (tolerance: " + tolerance_levels + ") ] ")
-        process_input(args, tolerance_levels)
+        process_input(args, cmd_executed, tolerance_levels)
     except KeyboardInterrupt:
         print("auto-abi was stopped with a Keyboard Interrupt.\n")
 
