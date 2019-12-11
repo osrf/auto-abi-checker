@@ -10,7 +10,7 @@ before_install:
   - sudo apt-get update -qq
 install:
   # need ignition, tinyxml for testing
-  - sudo apt-get install python3-rosdep python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev ros-melodic-ros-base
+  - sudo apt-get install python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev ros-melodic-ros-base
   - pip install rosdistro
 script:
   # unit test
