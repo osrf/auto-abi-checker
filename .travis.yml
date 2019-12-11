@@ -18,4 +18,4 @@ script:
   # Smoke test
   - sudo mkdir -p /usr/lib/python3.6/site-packages/
   - sudo python3 setup.py install
-  - auto-abi.py --orig-type ros-pkg --orig ros-melodic-roscpp-core --new-type ros-pkg --new ros-melodic-roscpp-core
+  - ROS_DISTRO="melodic" auto-abi.py --orig-type ros-pkg --orig ros-melodic-roscpp-core --new-type ros-pkg --new ros-melodic-roscpp-core
