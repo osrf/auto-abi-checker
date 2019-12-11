@@ -16,5 +16,6 @@ script:
   # unit test
   - python3 setup.py test || find /tmp -name log.txt -exec cat {} \;
   # Smoke test
+  - sudo mkdir -p /usr/lib/python3.6/site-packages/
   - sudo python3 setup.py install
   - auto-abi.py --orig-type ros-pkg --orig ros-melodic-roscpp-core --new-type ros-pkg --new ros-melodic-roscpp-core
