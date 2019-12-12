@@ -14,21 +14,22 @@ class TestFlags(unittest.TestCase):
         self.ros1 = SrcROSRepoGenerator('test_ros', 'melodic')
         self.ros2 = SrcROSRepoGenerator('test_ros', 'dashing')
         self.abi_exe = ABIExecutor()
+        self.common_flags_expected = '-DBOOST_HAS_PTHREADS=1 -pthread'
 
     def test_check_osrf_flags(self):
         self.assertEqual(
-                '--std=c++17',
-                self.abi_exe.get_compilation_flags(self.osrf, self.osrf))
+            '--std=c++17 ' + self.common_flags_expected,
+            self.abi_exe.get_compilation_flags(self.osrf, self.osrf))
 
     def test_check_ros1_flags(self):
         self.assertEqual(
-                '--std=c++14 -I/opt/ros/melodic/include',
-                self.abi_exe.get_compilation_flags(self.ros1, self.ros1))
+            '--std=c++14 ' + self.common_flags_expected + ' -I/opt/ros/melodic/include',
+            self.abi_exe.get_compilation_flags(self.ros1, self.ros1))
 
     def test_check_combo_flags(self):
         self.assertEqual(
-                '--std=c++17 -DBOOST_HAS_PTHREADS=1 -I/opt/ros/dashing/src/gtest_vendor/include -I/opt/ros/dashing/include',
-                self.abi_exe.get_compilation_flags(self.osrf, self.ros2))
+            '--std=c++17 ' + self.common_flags_expected + ' -I/opt/ros/dashing/src/gtest_vendor/include -I/opt/ros/dashing/include',
+            self.abi_exe.get_compilation_flags(self.osrf, self.ros2))
 
 
 class SrcTestPkg(SrcAptBase):
