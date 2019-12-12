@@ -27,11 +27,12 @@ class SrcROSBase(SrcAptBase):
             self.compilation_flags.append('--std=c++14')
         else:
             self.compilation_flags.append('--std=c++17')
-            # needed for gazebo_ros_pkgs
-            self.compilation_flags.append('-DBOOST_HAS_PTHREADS=1')
             # gtest-vendor is ROS2
             self.compilation_flags.append('-I' +
                 join('/opt/ros/', self.ros_distro, 'src', 'gtest_vendor', 'include'))
+        # needed for boost software on both platforms
+        self.compilation_flags.append('-DBOOST_HAS_PTHREADS=1')
+        self.compilation_flags.append('-pthread')
         # Needs to add /opt/ros includes to compile ROS software
         self.compilation_flags.append('-I' +
             join('/opt/ros/', self.ros_distro, 'include'))
