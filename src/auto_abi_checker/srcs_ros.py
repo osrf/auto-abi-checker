@@ -3,6 +3,7 @@
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 
+import glob
 from os import environ
 from os.path import join
 import rosdistro
@@ -32,6 +33,11 @@ class SrcROSBase(SrcAptBase):
             # gtest-vendor is ROS2
             self.compilation_flags.append('-I' +
                 join('/opt/ros/', self.ros_distro, 'src', 'gtest_vendor', 'include'))
+            # flags for rmw_connext packages
+            self.compilation_flags.append('-DRTI_UNIX')
+            for rti_path in glob.glob('/opt/rti.com/rti_connext_dds-*'):
+                self.compilation_flags.append('-I' + rti_path + '/include/')
+                self.compilation_flags.append('-I' + rti_path + '/include/ndds')
         # Needs to add /opt/ros includes to compile ROS software
         self.compilation_flags.append('-I' +
             join('/opt/ros/', self.ros_distro, 'include'))
