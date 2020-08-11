@@ -27,7 +27,7 @@ class TestFlags(unittest.TestCase):
 
     def test_check_combo_flags(self):
         self.assertEqual(
-                '--std=c++17 -DBOOST_HAS_PTHREADS=1 -I/opt/ros/dashing/src/gtest_vendor/include -I/opt/ros/dashing/include',
+                '--std=c++17 -DBOOST_HAS_PTHREADS=1 -I/opt/ros/dashing/src/gtest_vendor/include -DRTI_UNIX -I/opt/ros/dashing/include',
                 self.abi_exe.get_compilation_flags(self.osrf, self.ros2))
 
 
