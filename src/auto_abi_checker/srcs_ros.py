@@ -33,6 +33,9 @@ class SrcROSBase(SrcAptBase):
             # gtest-vendor is ROS2
             self.compilation_flags.append('-I' +
                 join('/opt/ros/', self.ros_distro, 'src', 'gtest_vendor', 'include'))
+            # flag to avoid problems in rcutils
+            # https://github.com/osrf/auto-abi-checker/issues/17
+            self.compilation_flags.append('-DRCUTILS__STDATOMIC_HELPER_H_')
             # flags for rmw_connext packages
             self.compilation_flags.append('-DRTI_UNIX')
             for rti_path in glob.glob('/opt/rti.com/rti_connext_dds-*'):
