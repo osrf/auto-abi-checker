@@ -6,7 +6,7 @@
 import subprocess
 from tempfile import mkdtemp
 from os import chdir, makedirs, environ
-from os.path import join, isdir, exists, realpath
+from os.path import join, isdir, exists, realpath, dirname
 from auto_abi_checker.utils import _check_call, error, info, subinfo, main_step_info
 
 
@@ -24,6 +24,7 @@ class ABIExecutor():
         self.empty_objects_found = False
         self.compilaton_errors_found = False
         self.auto_abi_cmd_executed = ''
+        self.ignore_file = join(dirname(__file__), 'config', 'symbols_ignored.txt')
 
     def run(self, orig_src, new_src, report_dir='', no_fail_if_emtpy=False,
             auto_abi_cmd_executed=''):
@@ -109,10 +110,11 @@ class ABIExecutor():
             return 0
 
         result = _check_call([self.bin,
-                             '-l', self.report_name,
-                             '-report-path', self.get_compat_report_file(),
-                             '-old', self.get_dump_file(orig_src),
-                             '-new', self.get_dump_file(new_src)])
+                                  '-skip-symbols', self.ignore_file,
+                                  '-l', self.report_name,
+                                  '-report-path', self.get_compat_report_file(),
+                                  '-old', self.get_dump_file(orig_src),
+                                  '-new', self.get_dump_file(new_src)])
 
         if result != 0:
             return result
