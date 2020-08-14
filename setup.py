@@ -16,7 +16,7 @@ def discover_tests():
 
 kwargs = {
     'name': 'auto_abi_checker',
-    'version': '0.1.13',
+    'version': '0.1.14',
     'packages': ['auto_abi_checker'],
     'package_dir': {'': 'src'},
     'include_package_data': True,
