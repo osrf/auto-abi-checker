@@ -1,0 +1,1 @@
+recursive-include src/auto_abi_checker/config *

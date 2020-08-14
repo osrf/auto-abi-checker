@@ -19,6 +19,7 @@ kwargs = {
     'version': '0.1.13',
     'packages': ['auto_abi_checker'],
     'package_dir': {'': 'src'},
+    'include_package_data': True,
     'author': 'Jose Luis Rivero',
     'author_email': 'jrivero@osrfoundation.org',
     'classifiers': [
