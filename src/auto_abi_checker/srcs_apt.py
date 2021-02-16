@@ -66,7 +66,7 @@ class SrcOSRFPkgGenerator(SrcAptBase):
 class SrcPkgApt(SrcAptBase):
     def __init__(self, name):
         SrcAptBase.__init__(self, name)
-        python_version = f'{version_info[0]}.{version_info[1]}'
+        python_version = f"{version_info[0]}.{version_info[1]}"
         # pyside uses Pyhon.h header in non stadard directory
         self.compilation_flags.append(f'-I/usr/include/python{python_version}m/')
 
