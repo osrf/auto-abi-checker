@@ -6,6 +6,8 @@
 from os import chdir, environ
 from auto_abi_checker.utils import _check_call, error
 from auto_abi_checker.srcs_base import SrcBase
+from subprocess import check_output
+from sys import version_info
 
 
 class SrcAptBase(SrcBase):
@@ -28,6 +30,8 @@ class SrcAptBase(SrcBase):
 
     def download_deb_packages(self, package_names):
         for p in package_names:
+            if not p:
+                continue
             # run_apt_update
             chdir(self.ws)
             result = _check_call(['apt-get', 'download', '-qq', p])
@@ -48,6 +52,7 @@ class SrcAptBase(SrcBase):
     def filter_files(self):
         True
 
+
 class SrcOSRFPkgGenerator(SrcAptBase):
     def __init__(self, name):
         SrcAptBase.__init__(self, name)
@@ -56,3 +61,17 @@ class SrcOSRFPkgGenerator(SrcAptBase):
 
     def get_deb_package_names(self, osrf_repo):
         return ["lib" + osrf_repo, "lib" + osrf_repo + "-dev"]
+
+
+class SrcPkgApt(SrcAptBase):
+    def __init__(self, name):
+        SrcAptBase.__init__(self, name)
+        python_version = f'{version_info[0]}.{version_info[1]}'
+        # pyside uses Pyhon.h header in non stadard directory
+        self.compilation_flags.append(f'-I/usr/include/python{python_version}m/')
+
+    def get_deb_package_names(self, src_package_name):
+        result = check_output(
+            'apt-cache showsrc ' + src_package_name + ' | grep "arch=" | awk \'{print $1}\'',
+            shell=True)
+        return result.decode().split('\n')

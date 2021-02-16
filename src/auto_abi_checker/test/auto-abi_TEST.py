@@ -1,6 +1,6 @@
 import os
 import unittest
-from auto_abi_checker.srcs_apt import SrcAptBase, SrcOSRFPkgGenerator
+from auto_abi_checker.srcs_apt import SrcAptBase, SrcOSRFPkgGenerator, SrcPkgApt
 from auto_abi_checker.srcs_ros import SrcROSRepoGenerator, SrcROSPkgGenerator
 from auto_abi_checker.srcs_local import SrcLocalDir
 from auto_abi_checker.abi_executor import ABIExecutor
@@ -38,7 +38,6 @@ class SrcTestPkg(SrcAptBase):
         self.test_files_dir = os.path.join(self.test_dir, 'files')
         self.test_debs_dir = os.path.join(self.test_dir, 'debs')
 
-
     def get_deb_package_names(self, stub):
         return ['libsdformat8', 'libsdformat8-dev']
 
@@ -74,6 +73,14 @@ class TestROSPkg(unittest.TestCase):
 
     def test_ros_multiple_names(self):
         self.rospkg.run('ros-melodic-rosclean,ros-melodic-cpp-common')
+
+
+class TestSrcPkgApt(unittest.TestCase):
+    def setUp(self):
+        self.srcpkg = SrcPkgApt('test_source_pkg')
+
+    def test_deb_pkg_name(self):
+        self.srcpkg.run('pyside')
 
 
 if __name__ == '__main__':

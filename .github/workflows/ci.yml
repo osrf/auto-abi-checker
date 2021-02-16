@@ -1,0 +1,48 @@
+name: auto-abi-checker
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: add ROS repo
+        uses: myci-actions/add-deb-repo@4
+        with:
+          repo: deb http://packages.ros.org/ros/ubuntu bionic main
+          repo-name: ROS stable
+          keys: C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+          key-server: keyserver.ubuntu.com
+      - name: add OSRF repo
+        uses: myci-actions/add-deb-repo@4
+        with:
+          repo: debhttp://packages.osrfoundation.org/gazebo/ubuntu-stable bionic main
+          repo-name: OSRF Ubuntu stable
+          keys: D2486D2DD83DB69272AFE98867170598AF249743
+          key-server: keyserver.ubuntu.com
+      - name: Install dependencies
+        run: |
+          # need ignition, tinyxml for testing
+          sudo apt-get install -qq python3-rosdep python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev flake8
+          python -m pip install --upgrade pip
+          pip install rosdistro
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Testing
+        run: |
+          python3 setup.py test || find /tmp -name log.txt -exec cat {} \;
