@@ -33,9 +33,9 @@ jobs:
       - name: Install dependencies
         run: |
           # need ignition, tinyxml for testing
-          sudo apt-get install -qq python3-rosdep python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev flake8 python3-wheel python3-docopt
+          sudo apt-get install -qq python3-rosdep python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev flake8 python3-wheel
           python3 -m pip install --upgrade pip
-          pip3 install rosdistro
+          pip3 install rosdistro docopt
           if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
       - name: Lint with flake8
         run: |
