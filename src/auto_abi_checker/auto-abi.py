@@ -32,6 +32,7 @@ Options:
 """
 
 import datetime
+import os
 import re
 import subprocess
 from sys import stderr, argv
