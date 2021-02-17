@@ -32,6 +32,7 @@ Options:
 """
 
 import datetime
+import os
 import re
 import subprocess
 from sys import stderr, argv
@@ -90,7 +91,9 @@ def process_input(args, cmd_executed, tolerance_levels):
         new_gen = generator.generate(new_type, 'new')
         new_gen.run(new_value)
 
-        abi_exe = ABIExecutor(tolerance_levels)
+        # TODO(tfoote) EVN hack for the moment add this as a commandline
+        compilation_flags = os.getenv('COMPILATION_FLAGS', default='')
+        abi_exe = ABIExecutor(tolerance_levels, compilation_flags=compilation_flags)
         abi_exe.run(src_gen,
                     new_gen,
                     report_dir,
