@@ -26,12 +26,14 @@ jobs:
       - name: add OSRF repo
         uses: myci-actions/add-deb-repo@4
         with:
-          repo: debhttp://packages.osrfoundation.org/gazebo/ubuntu-stable bionic main
+          repo: deb http://packages.osrfoundation.org/gazebo/ubuntu-stable bionic main
           repo-name: OSRF Ubuntu stable
           keys: D2486D2DD83DB69272AFE98867170598AF249743
           key-server: keyserver.ubuntu.com
       - name: Install dependencies
         run: |
+          ls /etc/apt/sources.list.d/*
+          cat /etc/apt/sources.list.d/*
           # need ignition, tinyxml for testing
           sudo apt-get install -qq python3-rosdep python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev flake8 python3-wheel
           python3 -m pip install --upgrade pip
