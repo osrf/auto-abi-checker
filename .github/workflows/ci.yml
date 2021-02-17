@@ -34,6 +34,7 @@ jobs:
         run: |
           ls /etc/apt/sources.list.d/*
           cat /etc/apt/sources.list.d/*
+          sudo apt-get update
           # need ignition, tinyxml for testing
           sudo apt-get install -qq python3-rosdep python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev flake8 python3-wheel
           python3 -m pip install --upgrade pip
