@@ -28,7 +28,7 @@ class SrcLocalDir(SrcBase):
 
     def copy_files(self, directory):
         info("Run copytree from  " + directory + " to " + self.ws_files)
-        copytree(directory, self.ws_files symlinks=True, ignore_dangling_symlinks=True)
+        copytree(directory, self.ws_files, symlinks=True, ignore_dangling_symlinks=True)
 
     def filter_files(self):
         True
