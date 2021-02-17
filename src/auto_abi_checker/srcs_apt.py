@@ -68,7 +68,7 @@ class SrcPkgApt(SrcAptBase):
         SrcAptBase.__init__(self, name)
         python_version = "%i.%i" % (version_info[0], version_info[1])
         # pyside uses Pyhon.h header in non stadard directory
-        self.compilation_flags.append(f'-I/usr/include/python{python_version}m/')
+        self.compilation_flags.append('-I/usr/include/python%sm/' % (python_version))
 
     def get_deb_package_names(self, src_package_name):
         result = check_output(
