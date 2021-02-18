@@ -3,11 +3,11 @@
 # Copyright 2018 Open Robotics
 # Licensed under the Apache License, Version 2.0
 
-from os import chdir, environ
+from os import chdir
 from auto_abi_checker.utils import _check_call, error
 from auto_abi_checker.srcs_base import SrcBase
 from subprocess import check_output
-from sys import version_info
+from sys import version_info, exc_info
 
 
 class SrcAptBase(SrcBase):
@@ -16,10 +16,13 @@ class SrcAptBase(SrcBase):
 
     def run(self, value):
         self.validate(value)
-        pkgs = self.get_deb_package_names(value)
-        self.download_deb_packages(pkgs)
-        self.extract_deb_files()
-        self.filter_files()
+        try:
+            pkgs = self.get_deb_package_names(value)
+            self.download_deb_packages(pkgs)
+            self.extract_deb_files()
+            self.filter_files()
+        except:
+            error(exc_info()[0])
 
     # override if need validation
     def validate(self, value):
