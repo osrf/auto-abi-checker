@@ -4,7 +4,7 @@ from auto_abi_checker.srcs_apt import SrcAptBase, SrcOSRFPkgGenerator, SrcPkgApt
 from auto_abi_checker.srcs_ros import SrcROSRepoGenerator, SrcROSPkgGenerator
 from auto_abi_checker.srcs_local import SrcLocalDir
 from auto_abi_checker.abi_executor import ABIExecutor
-from auto_abi_checker.utils import _check_call
+from auto_abi_checker.utils import _check_call, AppError
 from glob import glob
 
 
@@ -75,12 +75,14 @@ class TestROSPkg(unittest.TestCase):
         self.rospkg.run('ros-melodic-rosclean,ros-melodic-cpp-common')
 
 
+
 class TestSrcPkgAptFAIL(unittest.TestCase):
     def setUp(self):
         self.srcpkg = SrcPkgApt('test_source_pkg_fail')
 
     def test_deb_pkg_name(self):
-        self.assertRaises(self.srcpkg.run('pyside'))
+        with self.assertRaises(AppError):
+                self.srcpkg.run('nonexistantpkg')
 
 
 class TestSrcPkgApt(unittest.TestCase):
