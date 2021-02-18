@@ -121,7 +121,7 @@ def get_abi_checker_version():
 def main():
     try:
         version = "0.1.14"
-        tolerance_levels = "12"
+        tolerance_levels = "123"
         cmd_executed = ' '.join(argv[:])
         args = normalize_args(docopt(__doc__, version="auto-abi " + version))
         validate_input(args)
