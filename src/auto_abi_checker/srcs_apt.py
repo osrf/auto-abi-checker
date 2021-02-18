@@ -8,7 +8,7 @@ from auto_abi_checker.utils import _check_call, error
 from auto_abi_checker.srcs_base import SrcBase
 from subprocess import check_output
 from sys import version_info
-from traceback import format_exec
+from traceback import format_exc
 
 
 class SrcAptBase(SrcBase):
@@ -23,7 +23,7 @@ class SrcAptBase(SrcBase):
             self.extract_deb_files()
             self.filter_files()
         except:
-            error(format_exec())
+            error(format_exc())
 
     # override if need validation
     def validate(self, value):
