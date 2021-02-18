@@ -77,4 +77,7 @@ class SrcPkgApt(SrcAptBase):
         result = check_output(
             'apt-cache showsrc ' + src_package_name + ' | grep "arch=" | awk \'{print $1}\'',
             shell=True)
+        if not result:
+            raise Exception("Errors using apt-cache")
+
         return result.decode().split('\n')
