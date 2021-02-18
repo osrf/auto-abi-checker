@@ -77,7 +77,7 @@ class TestROSPkg(unittest.TestCase):
 
 class TestSrcPkgAptFAIL(unittest.TestCase):
     def setUp(self):
-        self.srcpkg = SrcPkgApt('test_source_pkg')
+        self.srcpkg = SrcPkgApt('test_source_pkg_fail')
 
     def test_deb_pkg_name(self):
         self.assertRaises(self.srcpkg.run('pyside'))
@@ -88,7 +88,7 @@ class TestSrcPkgApt(unittest.TestCase):
         self.srcpkg = SrcPkgApt('test_source_pkg')
 
     def test_deb_pkg_name(self):
-        self.assertRaises(self.srcpkg.run('xz-utils'))
+        self.srcpkg.run('ignition-math6')
 
 
 if __name__ == '__main__':
