@@ -80,7 +80,7 @@ class TestSrcPkgApt(unittest.TestCase):
         self.srcpkg = SrcPkgApt('test_source_pkg')
 
     def test_deb_pkg_name(self):
-        self.srcpkg.run('pyside')
+        self.assertRaises(self.srcpkg.run('pyside'))
 
 
 if __name__ == '__main__':
