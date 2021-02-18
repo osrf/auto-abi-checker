@@ -75,12 +75,20 @@ class TestROSPkg(unittest.TestCase):
         self.rospkg.run('ros-melodic-rosclean,ros-melodic-cpp-common')
 
 
-class TestSrcPkgApt(unittest.TestCase):
+class TestSrcPkgAptFAIL(unittest.TestCase):
     def setUp(self):
         self.srcpkg = SrcPkgApt('test_source_pkg')
 
     def test_deb_pkg_name(self):
         self.assertRaises(self.srcpkg.run('pyside'))
+
+
+class TestSrcPkgApt(unittest.TestCase):
+    def setUp(self):
+        self.srcpkg = SrcPkgApt('test_source_pkg')
+
+    def test_deb_pkg_name(self):
+        self.assertRaises(self.srcpkg.run('xz-utils'))
 
 
 if __name__ == '__main__':
