@@ -16,25 +16,17 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: add ROS repo
-        uses: myci-actions/add-deb-repo@4
-        with:
-          repo: deb http://packages.ros.org/ros/ubuntu bionic main
-          repo-name: ROS stable
-          keys: C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-          key-server: keyserver.ubuntu.com
-      - name: add OSRF repo
-        uses: myci-actions/add-deb-repo@4
-        with:
-          repo: deb http://packages.osrfoundation.org/gazebo/ubuntu-stable bionic main
-          repo-name: OSRF Ubuntu stable
-          keys: D2486D2DD83DB69272AFE98867170598AF249743
-          key-server: keyserver.ubuntu.com
+      - name: add ROS/OSRF repos
+        with: |
+          sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+          sudo sh -c 'echo "deb-src http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" >> /etc/apt/sources.list.d/ros-latest.list'
+          sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+          sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -sc) main" > /etc/apt/sources.list.d/osrf-stable.list'
+          sudo sh -c 'echo "deb-src http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -sc) main" >> /etc/apt/sources.list.d/osrf-stable.list'
+          sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key D2486D2DD83DB69272AFE98867170598AF249743
+          sudo apt-get update
       - name: Install dependencies
         run: |
-          ls /etc/apt/sources.list.d/*
-          cat /etc/apt/sources.list.d/*
-          sudo apt-get update
           # need ignition, tinyxml for testing
           sudo apt-get install -qq python3-rosdep python3 abi-compliance-checker libignition-math4-dev libtinyxml-dev flake8 python3-wheel
           python3 -m pip install --upgrade pip
